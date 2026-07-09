@@ -1,982 +1,3110 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard V2</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-*{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;font-family:'IBM Plex Sans',sans-serif;font-size:14px;background:#FAF9F5;color:#11201C;-webkit-font-smoothing:antialiased;}
-a{color:inherit;text-decoration:none;}
-button{font-family:inherit;cursor:pointer;border:none;background:none;}
-input,textarea{font-family:inherit;}
-:root{
-  --t900:#0B3B36;--t800:#0D4F48;--t700:#0F766E;--t500:#14B8A6;--t100:#E1F3F0;--t50:#F0FAF8;
-  --ink:#11201C;--ink2:#4B5D58;--ink3:#94A3A0;
-  --bg:#FAF9F5;--card:#fff;--line:#E4E1D8;--line2:#EEEBE2;
-  --red:#BE123C;--amber:#9A5B12;--amber-bg:#FEF3E2;
-  --bunker:#C2410C;--bunker-bg:#FBEBE1;
-  --vc:#2563EB;--vc-bg:#E7EEFD;
-  --vi:#0D9488;--vi-bg:#DFF3F0;
-  --sanct:#BE123C;--sanct-bg:#FBE4E9;
-  --sched:#7C3AED;--sched-bg:#EFE7FC;
-  --r:12px;--rL:20px;
-  --sh:0 1px 2px rgba(17,32,28,.05),0 8px 24px -8px rgba(17,32,28,.12);
-  --shL:0 8px 40px -8px rgba(17,32,28,.22);
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard V2</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-/* PAGES */
-.page{display:none;position:fixed;inset:0;z-index:10;}
-.page.show{display:flex;}
+    html,
+    body {
+      height: 100%;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      background: #F4F7FA;
+      color: #0F1C28;
+      -webkit-font-smoothing: antialiased;
+    }
 
-/* ══════════ LOGIN ══════════ */
-#pg-login{background:var(--t900);}
-.login-left{
-  width:55%;display:flex;flex-direction:column;justify-content:space-between;
-  padding:44px 52px;position:relative;overflow:hidden;
-}
-.login-left::before{
-  content:'';position:absolute;width:600px;height:600px;border-radius:50%;
-  top:-120px;right:-180px;
-  background:radial-gradient(circle,rgba(20,184,166,.18) 0%,transparent 70%);
-  pointer-events:none;
-}
-.login-left::after{
-  content:'';position:absolute;width:400px;height:400px;border-radius:50%;
-  bottom:-80px;left:-80px;
-  background:radial-gradient(circle,rgba(20,184,166,.12) 0%,transparent 70%);
-  pointer-events:none;
-}
-.login-logo{display:flex;align-items:center;gap:12px;}
-.login-logo img{height:26px;width:auto;filter:brightness(0) invert(1);}
-.login-logo-text{font-family:'Fraunces',serif;font-size:16px;font-weight:500;color:#fff;letter-spacing:-.01em;}
-.login-hero{position:relative;z-index:1;}
-.login-hero h1{font-family:'Fraunces',serif;font-weight:300;font-size:52px;line-height:1.1;color:#fff;letter-spacing:-.03em;margin-bottom:20px;}
-.login-hero h1 em{font-style:normal;color:var(--t500);}
-.login-hero p{font-size:15px;color:rgba(255,255,255,.55);line-height:1.6;max-width:380px;}
-.login-stats{display:flex;gap:20px;position:relative;z-index:1;}
-.stat-badge{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:14px 18px;}
-.stat-badge strong{display:block;font-family:'Fraunces',serif;font-size:22px;color:#fff;font-weight:500;}
-.stat-badge span{font-size:12px;color:rgba(255,255,255,.5);margin-top:2px;display:block;}
-.login-right{
-  width:45%;background:var(--card);display:flex;align-items:center;justify-content:center;
-  padding:48px;
-}
-.login-form{width:100%;max-width:360px;}
-.login-form .eyebrow{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--t700);margin-bottom:8px;}
-.login-form h2{font-family:'Fraunces',serif;font-size:30px;font-weight:500;margin-bottom:28px;letter-spacing:-.01em;}
-.f{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
-.f label{font-size:12.5px;font-weight:600;}
-.f input{border:1.5px solid var(--line);border-radius:10px;padding:11px 14px;font:inherit;font-size:14px;outline:none;transition:border-color .15s,box-shadow .15s;}
-.f input:focus{border-color:var(--t500);box-shadow:0 0 0 3px var(--t100);}
-.forgot-link{font-size:12.5px;color:var(--t700);font-weight:500;display:block;text-align:right;margin-top:-6px;margin-bottom:20px;}
-.btn-full{width:100%;padding:13px;border-radius:10px;font-size:14px;font-weight:600;background:var(--t700);color:#fff;border:none;margin-bottom:12px;transition:background .15s,transform .1s;}
-.btn-full:hover{background:var(--t800);}
-.btn-full:active{transform:scale(.99);}
-.btn-full.secondary{background:var(--line2);color:var(--ink);}
-.login-foot{font-size:12px;color:var(--ink3);text-align:center;margin-top:24px;}
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
 
-/* ══════════ FORGOT PASSWORD ══════════ */
-#pg-forgot{background:var(--bg);align-items:center;justify-content:center;}
-.forgot-card{background:var(--card);border:1px solid var(--line);border-radius:var(--rL);padding:40px;width:400px;box-shadow:var(--shL);}
-.forgot-card .back{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--t700);font-weight:500;margin-bottom:24px;}
-.forgot-card .back svg{width:14px;height:14px;}
-.forgot-card h2{font-family:'Fraunces',serif;font-size:24px;margin-bottom:6px;}
-.forgot-card p{font-size:13px;color:var(--ink2);margin-bottom:24px;line-height:1.5;}
-.sent-state{text-align:center;padding:8px 0;}
-.sent-icon{width:48px;height:48px;border-radius:50%;background:var(--t100);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;}
-.sent-icon svg{width:22px;height:22px;color:var(--t700);}
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
 
-/* ══════════ APP SHELL ══════════ */
-#pg-app{display:none;position:fixed;inset:0;z-index:5;}
-#pg-app.show{display:grid;grid-template-columns:72px 1fr;transition:grid-template-columns .22s ease;}
-#pg-app.sb-open{grid-template-columns:220px 1fr;}
+    input,
+    textarea {
+      font-family: inherit;
+    }
 
-/* SIDEBAR */
-.sb{
-  background:var(--t900);display:flex;flex-direction:column;align-items:center;
-  padding:20px 12px 16px;gap:4px;height:100vh;overflow:hidden;
-  position:sticky;top:0;transition:padding .22s;
-}
-#pg-app.sb-open .sb{align-items:stretch;}
-.sb-logo{display:flex;align-items:center;height:28px;margin-bottom:22px;justify-content:center;width:100%;}
-#pg-app.sb-open .sb-logo{justify-content:flex-start;padding-left:4px;}
-.sb-logo img{height:22px;width:auto;filter:brightness(0) invert(1);display:block;}
-.sb-logo .fallback{font-family:'Fraunces',serif;font-size:15px;color:#fff;font-weight:500;white-space:nowrap;}
-.sbi{
-  width:46px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;
-  color:rgba(255,255,255,.5);transition:all .15s;position:relative;flex-shrink:0;
-}
-#pg-app.sb-open .sbi{width:100%;height:40px;justify-content:flex-start;padding:0 10px;gap:11px;}
-.sbi svg{width:18px;height:18px;flex-shrink:0;}
-.sbi .lbl{display:none;font-size:13px;font-weight:500;white-space:nowrap;}
-#pg-app.sb-open .sbi .lbl{display:inline;}
-.sbi:hover{background:rgba(255,255,255,.08);color:#fff;}
-.sbi.on{background:rgba(255,255,255,.12);color:#fff;box-shadow:inset 3px 0 0 var(--t500);}
-#pg-app.sb-open .sbi.on{border-radius:10px;}
-.sbi .tt{
-  position:absolute;left:58px;top:50%;transform:translateY(-50%);
-  background:var(--ink);color:#fff;font-size:12px;padding:5px 10px;border-radius:7px;
-  white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .12s;z-index:50;
-}
-.sbi:hover .tt{opacity:1;}
-#pg-app.sb-open .sbi .tt{display:none;}
-.sb-gap{flex:1;}
-.sb-div{width:28px;height:1px;background:rgba(255,255,255,.12);margin:6px 0;align-self:center;}
-#pg-app.sb-open .sb-div{width:100%;}
-.sb-toggle{
-  width:46px;height:38px;border-radius:10px;
-  background:rgba(255,255,255,.06);color:rgba(255,255,255,.5);
-  display:flex;align-items:center;justify-content:center;margin-top:6px;flex-shrink:0;
-  transition:background .15s,color .15s;
-}
-#pg-app.sb-open .sb-toggle{width:100%;justify-content:flex-start;padding:0 10px;gap:10px;}
-.sb-toggle svg{width:15px;height:15px;transition:transform .22s;}
-#pg-app.sb-open .sb-toggle svg{transform:rotate(180deg);}
-.sb-toggle .lbl{display:none;font-size:12.5px;font-weight:500;}
-#pg-app.sb-open .sb-toggle .lbl{display:inline;}
-.sb-toggle:hover{background:rgba(255,255,255,.12);color:#fff;}
+    :root {
+      /* Deep-sea navy — hull & sidebar */
+      --t900: #0D1B2A;
+      --t800: #1B2E45;
+      --t700: #1E4D7B;
+      --t500: #3B82C4;
+      --t100: #DDEAF7;
+      --t50:  #EEF5FC;
+      /* Ink — oxidised iron */
+      --ink:  #0F1C28;
+      --ink2: #4A5E72;
+      --ink3: #96A8B8;
+      /* Surfaces — salt-bleached canvas */
+      --bg:   #F4F7FA;
+      --card: #FFFFFF;
+      --line: #DCE4ED;
+      --line2:#EBF0F6;
+      /* Semantic */
+      --red:  #C0392B;
+      --amber: #8A5C0A;
+      --amber-bg: #FEF3DC;
+      /* App accents — galley-era pigments */
+      --bunker:    #B45309;
+      --bunker-bg: #FEF0DC;
+      --vc:        #1E6FA8;
+      --vc-bg:     #DDEAF7;
+      --vi:        #0E7C6B;
+      --vi-bg:     #D6F0EB;
+      --sanct:     #9B1C3A;
+      --sanct-bg:  #FAE0E6;
+      --sched:     #5B3FA6;
+      --sched-bg:  #EDE8FA;
+      --r: 12px;
+      --rL: 20px;
+      --sh: 0 1px 2px rgba(13,27,42,.05), 0 8px 24px -8px rgba(13,27,42,.13);
+      --shL: 0 8px 40px -8px rgba(13,27,42,.24);
+    }
 
-/* MAIN */
-.main{display:flex;flex-direction:column;min-height:100vh;min-width:0;overflow-y:auto;}
-.topbar{
-  height:60px;flex-shrink:0;display:flex;align-items:center;gap:12px;
-  padding:0 28px;border-bottom:1px solid var(--line);background:var(--bg);
-  position:sticky;top:0;z-index:20;
-}
-.search-bar{
-  flex:1;max-width:400px;display:flex;align-items:center;gap:8px;
-  background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;
-  color:var(--ink2);
-}
-.search-bar svg{width:15px;height:15px;flex-shrink:0;}
-.search-bar input{border:none;outline:none;background:none;font:inherit;flex:1;font-size:13.5px;}
-.search-bar kbd{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink3);border:1px solid var(--line);border-radius:5px;padding:1px 6px;}
-.tr{margin-left:auto;display:flex;align-items:center;gap:10px;}
-.trial-pill{
-  display:flex;align-items:center;gap:6px;font-size:12px;font-weight:500;
-  padding:6px 11px;border-radius:20px;background:var(--amber-bg);color:var(--amber);
-  border:1px solid #F5DFB8;white-space:nowrap;
-}
-.trial-pill a{font-weight:700;text-decoration:underline;}
-.role-pill{font-size:12px;font-weight:500;color:var(--t700);background:var(--t100);padding:6px 12px;border-radius:20px;white-space:nowrap;}
-.bell{width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:var(--card);display:flex;align-items:center;justify-content:center;color:var(--ink2);position:relative;flex-shrink:0;}
-.bell svg{width:16px;height:16px;}
-.bell-dot{position:absolute;top:8px;right:9px;width:6px;height:6px;border-radius:50%;background:var(--sanct);}
-.avatar-btn{
-  width:34px;height:34px;border-radius:50%;background:var(--t100);color:var(--t700);
-  display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;flex-shrink:0;
-  border:2px solid transparent;transition:border-color .15s;
-}
-.avatar-btn:hover{border-color:var(--t500);}
-.avatar-btn.on{border-color:var(--t500);}
+    /* PAGES */
+    .page {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+    }
 
-/* CONTENT */
-.content{padding:32px 36px 64px;flex:1;}
-.view{display:none;}
-.view.show{display:block;}
+    .page.show {
+      display: flex;
+    }
 
-/* ══════════ DASHBOARD ══════════ */
-.page-eyebrow{font-size:11.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--t700);margin-bottom:6px;}
-.page-title{font-family:'Fraunces',serif;font-size:30px;font-weight:500;margin-bottom:4px;letter-spacing:-.01em;}
-.page-sub{color:var(--ink2);font-size:13.5px;margin-bottom:28px;}
+    /* ══════════ LOGIN ══════════ */
+    #pg-login {
+      background: linear-gradient(145deg, #0D1B2A 0%, #1B2E45 60%, #1E4D7B 100%);
+    }
 
-/* Needs attention */
-.attn-head{display:flex;align-items:center;gap:9px;margin-bottom:12px;}
-.attn-head h2{font-size:15px;font-weight:600;font-family:'IBM Plex Sans',sans-serif;}
-.attn-count{font-size:12.5px;color:var(--ink2);}
-.attn-strip{display:flex;gap:11px;overflow-x:auto;padding-bottom:4px;scroll-snap-type:x proximity;}
-.attn-strip::-webkit-scrollbar{height:4px;}
-.attn-strip::-webkit-scrollbar-thumb{background:var(--line);border-radius:2px;}
-.chip{
-  scroll-snap-align:start;flex:0 0 260px;
-  background:var(--card);border:1px solid var(--line);
-  border-left:3px solid var(--cc);
-  border-radius:var(--r);padding:14px 15px;
-  display:flex;flex-direction:column;gap:7px;
-  cursor:pointer;transition:transform .15s,box-shadow .15s;
-}
-.chip:hover{transform:translateY(-2px);box-shadow:var(--sh);}
-.chip-top{display:flex;align-items:center;gap:8px;}
-.chip-ico{width:24px;height:24px;border-radius:6px;background:var(--cb);color:var(--cc);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.chip-ico svg{width:13px;height:13px;}
-.chip-mod{font-size:11px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--cc);}
-.chip-text{font-size:13px;line-height:1.45;color:var(--ink);}
-.chip-text b{font-weight:600;}
-.chip-cta{font-size:12px;color:var(--ink2);display:flex;align-items:center;gap:4px;margin-top:auto;}
-.chip-cta svg{width:11px;height:11px;}
+    .login-left {
+      width: 55%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 44px 52px;
+      position: relative;
+      overflow: hidden;
+    }
 
-/* Sec head */
-.sh{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:13px;margin-top:32px;}
-.sh h2{font-size:15px;font-weight:600;font-family:'IBM Plex Sans',sans-serif;}
-.sh a{font-size:12.5px;color:var(--t700);font-weight:500;}
+    .login-left::before {
+      content: '';
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      top: -120px;
+      right: -180px;
+      background: radial-gradient(circle, rgba(20, 184, 166, .18) 0%, transparent 70%);
+      pointer-events: none;
+    }
 
-/* App grid */
-.app-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
-.app-grid-v{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
-.ac{
-  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
-  padding:14px 16px;display:flex;flex-direction:row;align-items:center;gap:14px;position:relative;
-  transition:box-shadow .15s,transform .15s;
-}
-.app-grid-v .ac{
-  flex-direction:column;align-items:stretch;gap:9px;padding:16px;
-}
-.app-grid-v .ac-body{flex:1;min-width:0;}
-.app-grid-v .ac-top{justify-content:space-between;}
-.app-grid-v .ac-foot{flex-wrap:wrap;justify-content:space-between;}
-.app-grid-v .doc-btn,.app-grid-v .launch-btn{flex:1;justify-content:center;}
-.ac:not(.ac-soon):hover{box-shadow:var(--sh);transform:translateY(-2px);cursor:pointer;}
-.ac-soon{opacity:.6;}
-.ac-ico{width:36px;height:36px;border-radius:9px;background:var(--ic-bg);color:var(--ic);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.ac-ico svg{width:17px;height:17px;}
-.ac-top{display:flex;align-items:center;gap:8px;margin-bottom:2px;}
-.ac-role{font-size:11px;font-weight:500;color:var(--ink2);background:var(--line2);padding:2px 7px;border-radius:20px;}
-.ac-title{font-size:13px;font-weight:600;line-height:1.3;}
-.ac-desc{font-size:12px;color:var(--ink2);line-height:1.4;}
-.ac-body{flex:1;min-width:0;}
-.ac-foot{display:flex;align-items:center;gap:7px;flex-shrink:0;}
-.doc-btn{
-  font-size:12px;font-weight:500;color:var(--ink2);
-  background:var(--line2);border:1px solid var(--line);
-  border-radius:7px;padding:8px 13px;display:flex;align-items:center;justify-content:center;gap:5px;
-  transition:background .15s,color .15s;
-}
-.doc-btn:hover{background:var(--line);color:var(--ink);}
-.doc-btn svg{width:11px;height:11px;}
-.launch-btn{
-  font-size:12px;font-weight:600;color:#fff;background:var(--t700);
-  border-radius:7px;padding:8px 13px;display:flex;align-items:center;justify-content:center;gap:5px;
-  transition:background .15s;
-}
-.launch-btn:hover{background:var(--t800);}
-.launch-btn svg{width:10px;height:10px;}
-.bm{
-  position:absolute;top:0;right:14px;
-  background:var(--ink2);color:#fff;
-  font-size:9px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
-  padding:7px 8px 10px;line-height:1;
-  clip-path:polygon(0 0,100% 0,100% 100%,50% 80%,0 100%);
-}
+    .login-left::after {
+      content: '';
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      bottom: -80px;
+      left: -80px;
+      background: radial-gradient(circle, rgba(20, 184, 166, .12) 0%, transparent 70%);
+      pointer-events: none;
+    }
 
-/* Activity */
-.activity{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;margin-top:28px;}
-.activity h3{font-size:14px;font-weight:600;margin-bottom:12px;}
-.ar{display:flex;gap:11px;padding:9px 0;border-bottom:1px solid var(--line2);}
-.ar:last-child{border-bottom:none;padding-bottom:0;}
-.ar-dot{width:7px;height:7px;border-radius:50%;margin-top:5px;flex-shrink:0;}
-.ar-text{font-size:13px;line-height:1.45;}
-.ar-time{font-size:11.5px;color:var(--ink3);font-family:'IBM Plex Mono',monospace;}
+    .login-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
 
-/* ══════════ USERS ══════════ */
-.users-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
-.users-hd h1{font-family:'Fraunces',serif;font-size:28px;font-weight:500;letter-spacing:-.01em;}
-.btn-primary{
-  background:var(--t700);color:#fff;border-radius:9px;padding:10px 15px;
-  font-size:13px;font-weight:600;display:flex;align-items:center;gap:7px;
-  transition:background .15s;
-}
-.btn-primary:hover{background:var(--t800);}
-.btn-primary svg{width:13px;height:13px;}
-.users-sub{color:var(--ink2);font-size:13.5px;margin-bottom:20px;}
-.table-top{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
-.tabs{display:flex;gap:3px;background:var(--line2);padding:3px;border-radius:9px;}
-.tab{border:none;background:none;font-size:12.5px;font-weight:500;color:var(--ink2);padding:6px 13px;border-radius:7px;}
-.tab.on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.07);}
-.ts{display:flex;align-items:center;gap:7px;background:var(--card);border:1px solid var(--line);border-radius:9px;padding:8px 12px;flex:1;max-width:260px;}
-.ts svg{width:14px;height:14px;color:var(--ink2);flex-shrink:0;}
-.ts input{border:none;outline:none;background:none;font:inherit;font-size:13.5px;flex:1;}
-.bulk{
-  display:none;align-items:center;gap:12px;
-  background:var(--ink);color:#fff;border-radius:10px;padding:10px 16px;margin-bottom:12px;font-size:13px;
-}
-.bulk.show{display:flex;}
-.bulk-count{font-weight:600;}
-.bulk-acts{display:flex;gap:7px;margin-left:auto;}
-.bulk button{background:rgba(255,255,255,.12);color:#fff;padding:6px 11px;border-radius:7px;font-size:12.5px;}
-.bulk button.del{background:rgba(190,18,60,.35);}
-table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;}
-thead th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink2);font-weight:600;padding:11px 16px;background:#FBFAF7;border-bottom:1px solid var(--line);position:sticky;top:60px;z-index:10;}
-td{padding:12px 16px;border-bottom:1px solid var(--line2);font-size:13.5px;vertical-align:middle;}
-tbody tr:last-child td{border-bottom:none;}
-tbody tr.acc-row td{border-bottom:none;padding:0;}
-tbody tr:hover{background:#FBFAF7;}
-.un{font-weight:600;}
-.ue{color:var(--ink2);font-size:12.5px;}
-.sdot{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;}
-.sdot::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--t500);}
-.sdot.off::before{background:#C7C3B6;}
-.sdot.off{color:var(--ink2);}
-@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
-.sdot::before{animation:pulse 2.5s ease infinite;}
-.sdot.off::before{animation:none;}
-.acc-chip{
-  display:inline-flex;align-items:center;gap:6px;background:var(--t100);color:var(--t700);
-  font-size:12px;font-weight:500;padding:5px 10px;border-radius:20px;border:none;cursor:pointer;
-}
-.acc-chip svg{width:10px;height:10px;transition:transform .15s;}
-.acc-chip.open svg{transform:rotate(180deg);}
-.acc-det{display:none;padding:9px 16px 12px 44px;background:#FBFAF7;}
-.acc-det.show{display:block;}
-.adr{display:flex;align-items:center;gap:8px;font-size:12.5px;padding:3px 0;color:var(--ink2);}
-.adr-dot{width:7px;height:7px;border-radius:2px;}
-.adr b{color:var(--ink);font-weight:500;}
-.row-acts{display:flex;align-items:center;gap:6px;}
-.ic-btn{width:28px;height:28px;border-radius:7px;border:1px solid var(--line);background:var(--card);display:flex;align-items:center;justify-content:center;color:var(--ink2);}
-.ic-btn svg{width:13px;height:13px;}
-.ic-btn.del-btn:hover{border-color:var(--red);color:var(--red);}
-.ic-btn:hover{border-color:var(--t500);color:var(--t700);}
-.chk{width:15px;height:15px;accent-color:var(--t700);}
+    .login-logo img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
 
-/* ══════════ PROFILE ══════════ */
-.profile-grid{display:grid;grid-template-columns:240px 1fr;gap:20px;}
-.profile-nav{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px;height:fit-content;}
-.pnav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:9px;font-size:13.5px;font-weight:500;color:var(--ink2);width:100%;transition:background .15s,color .15s;}
-.pnav-item svg{width:16px;height:16px;flex-shrink:0;}
-.pnav-item:hover{background:var(--line2);color:var(--ink);}
-.pnav-item.on{background:var(--t100);color:var(--t700);}
-.pnav-sep{height:1px;background:var(--line2);margin:8px 0;}
-.pnav-item.danger{color:var(--red);}
-.pnav-item.danger:hover{background:#FBE4E9;}
-.pcontent{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px;}
-.pcontent h2{font-family:'Fraunces',serif;font-size:22px;font-weight:500;margin-bottom:6px;letter-spacing:-.01em;}
-.pcontent .pdesc{font-size:13px;color:var(--ink2);margin-bottom:26px;}
-.avatar-block{display:flex;align-items:center;gap:16px;margin-bottom:26px;padding-bottom:24px;border-bottom:1px solid var(--line2);}
-.big-avatar{width:60px;height:60px;border-radius:50%;background:var(--t100);color:var(--t700);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:600;font-family:'Fraunces',serif;}
-.avatar-info strong{display:block;font-size:15px;font-weight:600;}
-.avatar-info span{font-size:13px;color:var(--ink2);}
-.avatar-upload{font-size:12.5px;color:var(--t700);font-weight:500;margin-top:6px;cursor:pointer;}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;}
-.form-grid .f{margin-bottom:0;}
-.save-row{display:flex;gap:10px;}
-.btn-sec{background:var(--line2);border:none;border-radius:9px;padding:10px 16px;font-size:13px;font-weight:600;color:var(--ink);}
-.btn-pr{background:var(--t700);border:none;border-radius:9px;padding:10px 18px;font-size:13px;font-weight:600;color:#fff;}
+    .login-logo-text {
+      font-family: 'Fraunces', serif;
+      font-size: 16px;
+      font-weight: 500;
+      color: #fff;
+      letter-spacing: -.01em;
+    }
 
-/* ══════════ MODALS ══════════ */
-.overlay{
-  position:fixed;inset:0;background:rgba(17,32,28,.45);backdrop-filter:blur(3px);
-  display:none;align-items:flex-start;justify-content:center;z-index:100;padding:48px 20px;overflow-y:auto;
-}
-.overlay.show{display:flex;}
-.modal{background:var(--card);border-radius:var(--rL);width:100%;max-width:540px;box-shadow:var(--shL);}
-.mh{padding:22px 26px 16px;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;justify-content:space-between;}
-.mh h2{font-family:'Fraunces',serif;font-size:20px;font-weight:500;margin-bottom:3px;letter-spacing:-.01em;}
-.mh p{font-size:13px;color:var(--ink2);}
-.m-close{width:30px;height:30px;border-radius:8px;background:var(--line2);display:flex;align-items:center;justify-content:center;color:var(--ink2);flex-shrink:0;}
-.m-close svg{width:14px;height:14px;}
-.mb{padding:22px 26px;max-height:60vh;overflow-y:auto;}
-.fr2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
-.status-row{display:flex;align-items:center;gap:10px;margin-bottom:18px;}
-.status-row label{font-size:12.5px;font-weight:600;}
-.sw{width:36px;height:20px;border-radius:20px;background:var(--line2);position:relative;padding:0;flex-shrink:0;transition:background .15s;}
-.sw.on{background:var(--t500);}
-.sw .kn{position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .15s;box-shadow:0 1px 2px rgba(0,0,0,.2);}
-.sw.on .kn{left:18px;}
-.sw-lbl{font-size:13px;font-weight:500;}
+    .login-hero {
+      position: relative;
+      z-index: 1;
+    }
 
-/* Role assignment */
-.asec-lbl{font-size:12px;font-weight:600;color:var(--ink2);text-transform:uppercase;letter-spacing:.04em;margin:0 0 10px;}
-.role-mode{display:flex;gap:3px;background:var(--line2);padding:3px;border-radius:9px;width:fit-content;margin-bottom:14px;}
-.rm-btn{border:none;background:none;font-size:12.5px;font-weight:500;color:var(--ink2);padding:7px 13px;border-radius:7px;}
-.rm-btn.on{background:var(--card);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.06);}
-.app-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line2);}
-.app-row:last-child{border-bottom:none;}
-.app-dot{width:8px;height:8px;border-radius:3px;flex-shrink:0;}
-.app-name{font-size:13px;font-weight:500;flex:1;}
-.seg{display:flex;background:var(--line2);border-radius:7px;padding:2px;flex-shrink:0;}
-.sg{border:none;background:none;font-size:11.5px;font-weight:600;padding:5px 9px;border-radius:5px;color:var(--ink2);}
-.sg.on{background:var(--card);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08);}
-.sg.on.adm{background:var(--t700);color:#fff;}
-.sg.on.usr{background:var(--ink);color:#fff;}
-.sum{margin:16px 0 0;background:var(--t100);border-radius:9px;padding:11px 13px;font-size:12.5px;color:var(--t900);display:flex;gap:8px;}
-.sum svg{width:13px;height:13px;flex-shrink:0;margin-top:1px;}
-.mf{padding:14px 26px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:9px;}
+    .login-hero h1 {
+      font-family: 'Fraunces', serif;
+      font-weight: 300;
+      font-size: 52px;
+      line-height: 1.1;
+      color: #fff;
+      letter-spacing: -.03em;
+      margin-bottom: 20px;
+    }
 
-/* Delete confirm modal */
-.del-icon{width:44px;height:44px;border-radius:50%;background:#FBE4E9;display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
-.del-icon svg{width:20px;height:20px;color:var(--red);}
-.btn-del{background:var(--red);color:#fff;border:none;border-radius:9px;padding:10px 18px;font-size:13px;font-weight:600;}
+    .login-hero h1 em {
+      font-style: normal;
+      color: var(--t500);
+    }
 
-/* Profile panel */
-.psub{display:none;}
-.psub.show{display:block;}
+    .login-hero p {
+      font-size: 15px;
+      color: rgba(255, 255, 255, .55);
+      line-height: 1.6;
+      max-width: 380px;
+    }
 
-/* Logout confirm */
-.logout-confirm{text-align:center;padding:8px 0;}
-.logout-confirm p{font-size:14px;color:var(--ink2);margin-bottom:20px;line-height:1.5;}
+    .login-stats {
+      display: flex;
+      gap: 20px;
+      position: relative;
+      z-index: 1;
+    }
 
-@media(max-width:1100px){.app-grid{grid-template-columns:repeat(3,1fr);}}
-@media(max-width:768px){
-  #pg-app{grid-template-columns:1fr!important;}
-  .sb{display:none;}
-  .app-grid{grid-template-columns:repeat(2,1fr);}
-  .content{padding:20px;}
-  .form-grid,.fr2{grid-template-columns:1fr;}
-  .profile-grid{grid-template-columns:1fr;}
-}
-</style>
+    .stat-badge {
+      background: rgba(255, 255, 255, .07);
+      border: 1px solid rgba(255, 255, 255, .1);
+      border-radius: 10px;
+      padding: 14px 18px;
+    }
+
+    .stat-badge strong {
+      display: block;
+      font-family: 'Fraunces', serif;
+      font-size: 22px;
+      color: #fff;
+      font-weight: 500;
+    }
+
+    .stat-badge span {
+      font-size: 12px;
+      color: rgba(255, 255, 255, .5);
+      margin-top: 2px;
+      display: block;
+    }
+
+    .login-right {
+      width: 45%;
+      background: var(--card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px;
+    }
+
+    .login-form {
+      width: 100%;
+      max-width: 360px;
+    }
+
+    .login-form .eyebrow {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--t700);
+      margin-bottom: 8px;
+    }
+
+    .login-form h2 {
+      font-family: 'Fraunces', serif;
+      font-size: 30px;
+      font-weight: 500;
+      margin-bottom: 28px;
+      letter-spacing: -.01em;
+    }
+
+    .f {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .f label {
+      font-size: 12.5px;
+      font-weight: 600;
+    }
+
+    .f input {
+      border: 1.5px solid var(--line);
+      border-radius: 10px;
+      padding: 11px 14px;
+      font: inherit;
+      font-size: 14px;
+      outline: none;
+      transition: border-color .15s, box-shadow .15s;
+    }
+
+    .f input:focus {
+      border-color: var(--t500);
+      box-shadow: 0 0 0 3px var(--t100);
+    }
+
+    .forgot-link {
+      font-size: 12.5px;
+      color: var(--t700);
+      font-weight: 500;
+      display: block;
+      text-align: right;
+      margin-top: -6px;
+      margin-bottom: 20px;
+    }
+
+    .btn-full {
+      width: 100%;
+      padding: 13px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      background: var(--t700);
+      color: #fff;
+      border: none;
+      margin-bottom: 12px;
+      transition: background .15s, transform .1s;
+    }
+
+    .btn-full:hover {
+      background: var(--t800);
+    }
+
+    .btn-full:active {
+      transform: scale(.99);
+    }
+
+    .btn-full.secondary {
+      background: var(--line2);
+      color: var(--ink);
+    }
+
+    .login-foot {
+      font-size: 12px;
+      color: var(--ink3);
+      text-align: center;
+      margin-top: 24px;
+    }
+
+    /* ══════════ FORGOT PASSWORD ══════════ */
+    #pg-forgot {
+      background: var(--bg);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .forgot-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--rL);
+      padding: 40px;
+      width: 400px;
+      box-shadow: var(--shL);
+    }
+
+    .forgot-card .back {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--t700);
+      font-weight: 500;
+      margin-bottom: 24px;
+    }
+
+    .forgot-card .back svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .forgot-card h2 {
+      font-family: 'Fraunces', serif;
+      font-size: 24px;
+      margin-bottom: 6px;
+    }
+
+    .forgot-card p {
+      font-size: 13px;
+      color: var(--ink2);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .sent-state {
+      text-align: center;
+      padding: 8px 0;
+    }
+
+    .sent-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--t100);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 14px;
+    }
+
+    .sent-icon svg {
+      width: 22px;
+      height: 22px;
+      color: var(--t700);
+    }
+
+    /* ══════════ APP SHELL ══════════ */
+    #pg-app {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+    }
+
+    #pg-app.show {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      transition: grid-template-columns .22s ease;
+    }
+
+    #pg-app.sb-open {
+      grid-template-columns: 220px 1fr;
+    }
+
+    /* SIDEBAR */
+    .sb {
+      background: var(--t900);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 12px 16px;
+      gap: 4px;
+      height: 100vh;
+      overflow: hidden;
+      position: sticky;
+      top: 0;
+      transition: padding .22s;
+    }
+
+    #pg-app.sb-open .sb {
+      align-items: stretch;
+    }
+
+    .sb-logo {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      height: 40px;
+      margin-bottom: 22px;
+      justify-content: center;
+      width: 100%;
+    }
+
+    #pg-app.sb-open .sb-logo {
+      justify-content: flex-start;
+      padding-left: 4px;
+    }
+
+    .sb-logo img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      flex-shrink: 0;
+      display: block;
+    }
+
+    .sb-logo .sb-name {
+      display: none;
+      font-family: 'Fraunces', serif;
+      font-size: 15px;
+      color: #fff;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    #pg-app.sb-open .sb-logo .sb-name {
+      display: inline;
+    }
+
+    .sbi {
+      width: 46px;
+      height: 44px;
+      border-radius: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, .5);
+      transition: all .15s;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    #pg-app.sb-open .sbi {
+      width: 100%;
+      height: 40px;
+      justify-content: flex-start;
+      padding: 0 10px;
+      gap: 11px;
+    }
+
+    .sbi svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .sbi .lbl {
+      display: none;
+      font-size: 13px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    #pg-app.sb-open .sbi .lbl {
+      display: inline;
+    }
+
+    .sbi:hover {
+      background: rgba(255, 255, 255, .08);
+      color: #fff;
+    }
+
+    .sbi.on {
+      background: rgba(255, 255, 255, .12);
+      color: #fff;
+      box-shadow: inset 3px 0 0 var(--t500);
+    }
+
+    #pg-app.sb-open .sbi.on {
+      border-radius: 10px;
+    }
+
+    .sbi .tt {
+      position: absolute;
+      left: 58px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--ink);
+      color: #fff;
+      font-size: 12px;
+      padding: 5px 10px;
+      border-radius: 7px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .12s;
+      z-index: 50;
+    }
+
+    .sbi:hover .tt {
+      opacity: 1;
+    }
+
+    #pg-app.sb-open .sbi .tt {
+      display: none;
+    }
+
+    .sb-gap {
+      flex: 1;
+    }
+
+    .sb-div {
+      width: 28px;
+      height: 1px;
+      background: rgba(255, 255, 255, .12);
+      margin: 6px 0;
+      align-self: center;
+    }
+
+    #pg-app.sb-open .sb-div {
+      width: 100%;
+    }
+
+    .sb-toggle {
+      width: 46px;
+      height: 38px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, .06);
+      color: rgba(255, 255, 255, .5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 6px;
+      flex-shrink: 0;
+      transition: background .15s, color .15s;
+    }
+
+    #pg-app.sb-open .sb-toggle {
+      width: 100%;
+      justify-content: flex-start;
+      padding: 0 10px;
+      gap: 10px;
+    }
+
+    .sb-toggle svg {
+      width: 15px;
+      height: 15px;
+      transition: transform .22s;
+    }
+
+    #pg-app.sb-open .sb-toggle svg {
+      transform: rotate(180deg);
+    }
+
+    .sb-toggle .lbl {
+      display: none;
+      font-size: 12.5px;
+      font-weight: 500;
+    }
+
+    #pg-app.sb-open .sb-toggle .lbl {
+      display: inline;
+    }
+
+    .sb-toggle:hover {
+      background: rgba(255, 255, 255, .12);
+      color: #fff;
+    }
+
+    /* MAIN */
+    .main {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      min-width: 0;
+      overflow-y: auto;
+    }
+
+    .topbar {
+      height: 60px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 28px;
+      border-bottom: 1px solid var(--line);
+      background: var(--bg);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .search-bar {
+      flex: 1;
+      max-width: 400px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 8px 12px;
+      color: var(--ink2);
+    }
+
+    .search-bar svg {
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+    }
+
+    .search-bar input {
+      border: none;
+      outline: none;
+      background: none;
+      font: inherit;
+      flex: 1;
+      font-size: 13.5px;
+    }
+
+    .search-bar kbd {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--ink3);
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      padding: 1px 6px;
+    }
+
+    .tr {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .trial-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 6px 11px;
+      border-radius: 20px;
+      background: var(--amber-bg);
+      color: var(--amber);
+      border: 1px solid #F5DFB8;
+      white-space: nowrap;
+    }
+
+    .trial-pill a {
+      font-weight: 700;
+      text-decoration: underline;
+    }
+
+    .role-pill {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--t700);
+      background: var(--t100);
+      padding: 6px 12px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .bell {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink2);
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .bell svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .bell-dot {
+      position: absolute;
+      top: 8px;
+      right: 9px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--sanct);
+    }
+
+    .avatar-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--t100);
+      color: var(--t700);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 12px;
+      flex-shrink: 0;
+      border: 2px solid transparent;
+      transition: border-color .15s;
+    }
+
+    .avatar-btn:hover {
+      border-color: var(--t500);
+    }
+
+    .avatar-btn.on {
+      border-color: var(--t500);
+    }
+
+    /* CONTENT */
+    .content {
+      padding: 32px 36px 64px;
+      flex: 1;
+    }
+
+    .view {
+      display: none;
+    }
+
+    .view.show {
+      display: block;
+    }
+
+    /* ══════════ DASHBOARD ══════════ */
+    .page-eyebrow {
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: var(--t700);
+      margin-bottom: 6px;
+    }
+
+    .page-title {
+      font-family: 'Fraunces', serif;
+      font-size: 30px;
+      font-weight: 500;
+      margin-bottom: 4px;
+      letter-spacing: -.01em;
+    }
+
+    .page-sub {
+      color: var(--ink2);
+      font-size: 13.5px;
+      margin-bottom: 28px;
+    }
+
+    /* Needs attention */
+    .attn-head {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 12px;
+    }
+
+    .attn-head h2 {
+      font-size: 15px;
+      font-weight: 600;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }
+
+    .attn-count {
+      font-size: 12.5px;
+      color: var(--ink2);
+    }
+
+    .attn-strip {
+      display: flex;
+      gap: 11px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scroll-snap-type: x proximity;
+    }
+
+    .attn-strip::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    .attn-strip::-webkit-scrollbar-thumb {
+      background: var(--line);
+      border-radius: 2px;
+    }
+
+    .chip {
+      scroll-snap-align: start;
+      flex: 0 0 260px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--cc);
+      border-radius: var(--r);
+      padding: 14px 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      cursor: pointer;
+      transition: transform .15s, box-shadow .15s;
+    }
+
+    .chip:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--sh);
+    }
+
+    .chip-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chip-ico {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      background: var(--cb);
+      color: var(--cc);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .chip-ico svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    .chip-mod {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+      color: var(--cc);
+    }
+
+    .chip-text {
+      font-size: 13px;
+      line-height: 1.45;
+      color: var(--ink);
+    }
+
+    .chip-text b {
+      font-weight: 600;
+    }
+
+    .chip-cta {
+      font-size: 12px;
+      color: var(--ink2);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: auto;
+    }
+
+    .chip-cta svg {
+      width: 11px;
+      height: 11px;
+    }
+
+    /* Sec head */
+    .sh {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 13px;
+      margin-top: 32px;
+    }
+
+    .sh h2 {
+      font-size: 15px;
+      font-weight: 600;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }
+
+    .sh a {
+      font-size: 12.5px;
+      color: var(--t700);
+      font-weight: 500;
+    }
+
+    /* App grid */
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .app-grid-v {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .ac {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 14px;
+      position: relative;
+      transition: box-shadow .15s, transform .15s;
+    }
+
+    .app-grid-v .ac {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 9px;
+      padding: 16px;
+    }
+
+    .app-grid-v .ac-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .app-grid-v .ac-top {
+      justify-content: space-between;
+    }
+
+    .app-grid-v .ac-foot {
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .app-grid-v .doc-btn,
+    .app-grid-v .launch-btn {
+      flex: 1;
+      justify-content: center;
+    }
+
+    .ac:not(.ac-soon):hover {
+      box-shadow: var(--sh);
+      transform: translateY(-2px);
+      cursor: pointer;
+    }
+
+    .ac-soon {
+      opacity: .6;
+    }
+
+    .ac-ico {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      background: var(--ic-bg);
+      color: var(--ic);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .ac-ico svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .ac-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 2px;
+    }
+
+    .ac-role {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--ink2);
+      background: var(--line2);
+      padding: 2px 7px;
+      border-radius: 20px;
+    }
+
+    .ac-title {
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .ac-desc {
+      font-size: 12px;
+      color: var(--ink2);
+      line-height: 1.4;
+    }
+
+    .ac-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .ac-foot {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex-shrink: 0;
+    }
+
+    .doc-btn {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--ink2);
+      background: var(--line2);
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      padding: 8px 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: background .15s, color .15s;
+    }
+
+    .doc-btn:hover {
+      background: var(--line);
+      color: var(--ink);
+    }
+
+    .doc-btn svg {
+      width: 11px;
+      height: 11px;
+    }
+
+    .launch-btn {
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+      background: var(--t700);
+      border-radius: 7px;
+      padding: 8px 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: background .15s;
+    }
+
+    .launch-btn:hover {
+      background: var(--t800);
+    }
+
+    .launch-btn svg {
+      width: 10px;
+      height: 10px;
+    }
+
+    .bm {
+      position: absolute;
+      top: 0;
+      right: 14px;
+      background: var(--ink2);
+      color: #fff;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      padding: 7px 8px 10px;
+      line-height: 1;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
+    }
+
+    /* Activity */
+    .activity {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      padding: 18px 20px;
+      margin-top: 28px;
+    }
+
+    .activity h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .ar {
+      display: flex;
+      gap: 11px;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--line2);
+    }
+
+    .ar:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .ar-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+
+    .ar-text {
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .ar-time {
+      font-size: 11.5px;
+      color: var(--ink3);
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    /* ══════════ USERS ══════════ */
+    .users-hd {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+
+    .users-hd h1 {
+      font-family: 'Fraunces', serif;
+      font-size: 28px;
+      font-weight: 500;
+      letter-spacing: -.01em;
+    }
+
+    .btn-primary {
+      background: var(--t700);
+      color: #fff;
+      border-radius: 9px;
+      padding: 10px 15px;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      transition: background .15s;
+    }
+
+    .btn-primary:hover {
+      background: var(--t800);
+    }
+
+    .btn-primary svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    .users-sub {
+      color: var(--ink2);
+      font-size: 13.5px;
+      margin-bottom: 20px;
+    }
+
+    .table-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 3px;
+      background: var(--line2);
+      padding: 3px;
+      border-radius: 9px;
+    }
+
+    .tab {
+      border: none;
+      background: none;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--ink2);
+      padding: 6px 13px;
+      border-radius: 7px;
+    }
+
+    .tab.on {
+      background: var(--card);
+      color: var(--ink);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, .07);
+    }
+
+    .ts {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      padding: 8px 12px;
+      flex: 1;
+      max-width: 260px;
+    }
+
+    .ts svg {
+      width: 14px;
+      height: 14px;
+      color: var(--ink2);
+      flex-shrink: 0;
+    }
+
+    .ts input {
+      border: none;
+      outline: none;
+      background: none;
+      font: inherit;
+      font-size: 13.5px;
+      flex: 1;
+    }
+
+    .bulk {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      background: var(--ink);
+      color: #fff;
+      border-radius: 10px;
+      padding: 10px 16px;
+      margin-bottom: 12px;
+      font-size: 13px;
+    }
+
+    .bulk.show {
+      display: flex;
+    }
+
+    .bulk-count {
+      font-weight: 600;
+    }
+
+    .bulk-acts {
+      display: flex;
+      gap: 7px;
+      margin-left: auto;
+    }
+
+    .bulk button {
+      background: rgba(255, 255, 255, .12);
+      color: #fff;
+      padding: 6px 11px;
+      border-radius: 7px;
+      font-size: 12.5px;
+    }
+
+    .bulk button.del {
+      background: rgba(190, 18, 60, .35);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      overflow: hidden;
+    }
+
+    thead th {
+      text-align: left;
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: var(--ink2);
+      font-weight: 600;
+      padding: 11px 16px;
+      background: #FBFAF7;
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 60px;
+      z-index: 10;
+    }
+
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line2);
+      font-size: 13.5px;
+      vertical-align: middle;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    tbody tr.acc-row td {
+      border-bottom: none;
+      padding: 0;
+    }
+
+    tbody tr:hover {
+      background: #FBFAF7;
+    }
+
+    .un {
+      font-weight: 600;
+    }
+
+    .ue {
+      color: var(--ink2);
+      font-size: 12.5px;
+    }
+
+    .sdot {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12.5px;
+    }
+
+    .sdot::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--t500);
+    }
+
+    .sdot.off::before {
+      background: #C7C3B6;
+    }
+
+    .sdot.off {
+      color: var(--ink2);
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: .4;
+      }
+    }
+
+    .sdot::before {
+      animation: pulse 2.5s ease infinite;
+    }
+
+    .sdot.off::before {
+      animation: none;
+    }
+
+    .acc-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--t100);
+      color: var(--t700);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 10px;
+      border-radius: 20px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .acc-chip svg {
+      width: 10px;
+      height: 10px;
+      transition: transform .15s;
+    }
+
+    .acc-chip.open svg {
+      transform: rotate(180deg);
+    }
+
+    .acc-det {
+      display: none;
+      padding: 9px 16px 12px 44px;
+      background: #FBFAF7;
+    }
+
+    .acc-det.show {
+      display: block;
+    }
+
+    .adr {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+      padding: 3px 0;
+      color: var(--ink2);
+    }
+
+    .adr-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 2px;
+    }
+
+    .adr b {
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .row-acts {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ic-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink2);
+    }
+
+    .ic-btn svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    .ic-btn.del-btn:hover {
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    .ic-btn:hover {
+      border-color: var(--t500);
+      color: var(--t700);
+    }
+
+    .chk {
+      width: 15px;
+      height: 15px;
+      accent-color: var(--t700);
+    }
+
+    /* ══════════ PROFILE ══════════ */
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 20px;
+    }
+
+    .profile-nav {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      padding: 12px;
+      height: fit-content;
+    }
+
+    .pnav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 9px;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--ink2);
+      width: 100%;
+      transition: background .15s, color .15s;
+    }
+
+    .pnav-item svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    .pnav-item:hover {
+      background: var(--line2);
+      color: var(--ink);
+    }
+
+    .pnav-item.on {
+      background: var(--t100);
+      color: var(--t700);
+    }
+
+    .pnav-sep {
+      height: 1px;
+      background: var(--line2);
+      margin: 8px 0;
+    }
+
+    .pnav-item.danger {
+      color: var(--red);
+    }
+
+    .pnav-item.danger:hover {
+      background: #FBE4E9;
+    }
+
+    .pcontent {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      padding: 28px;
+    }
+
+    .pcontent h2 {
+      font-family: 'Fraunces', serif;
+      font-size: 22px;
+      font-weight: 500;
+      margin-bottom: 6px;
+      letter-spacing: -.01em;
+    }
+
+    .pcontent .pdesc {
+      font-size: 13px;
+      color: var(--ink2);
+      margin-bottom: 26px;
+    }
+
+    .avatar-block {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 26px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--line2);
+    }
+
+    .big-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--t100);
+      color: var(--t700);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 600;
+      font-family: 'Fraunces', serif;
+    }
+
+    .avatar-info strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .avatar-info span {
+      font-size: 13px;
+      color: var(--ink2);
+    }
+
+    .avatar-upload {
+      font-size: 12.5px;
+      color: var(--t700);
+      font-weight: 500;
+      margin-top: 6px;
+      cursor: pointer;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .form-grid .f {
+      margin-bottom: 0;
+    }
+
+    .save-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-sec {
+      background: var(--line2);
+      border: none;
+      border-radius: 9px;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .btn-pr {
+      background: var(--t700);
+      border: none;
+      border-radius: 9px;
+      padding: 10px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    /* ══════════ MODALS ══════════ */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(17, 32, 28, .45);
+      backdrop-filter: blur(3px);
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      z-index: 100;
+      padding: 48px 20px;
+      overflow-y: auto;
+    }
+
+    .overlay.show {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--card);
+      border-radius: var(--rL);
+      width: 100%;
+      max-width: 540px;
+      box-shadow: var(--shL);
+    }
+
+    .mh {
+      padding: 22px 26px 16px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
+    .mh h2 {
+      font-family: 'Fraunces', serif;
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 3px;
+      letter-spacing: -.01em;
+    }
+
+    .mh p {
+      font-size: 13px;
+      color: var(--ink2);
+    }
+
+    .m-close {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: var(--line2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink2);
+      flex-shrink: 0;
+    }
+
+    .m-close svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .mb {
+      padding: 22px 26px;
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+
+    .fr2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .status-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .status-row label {
+      font-size: 12.5px;
+      font-weight: 600;
+    }
+
+    .sw {
+      width: 36px;
+      height: 20px;
+      border-radius: 20px;
+      background: var(--line2);
+      position: relative;
+      padding: 0;
+      flex-shrink: 0;
+      transition: background .15s;
+    }
+
+    .sw.on {
+      background: var(--t500);
+    }
+
+    .sw .kn {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #fff;
+      transition: left .15s;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+    }
+
+    .sw.on .kn {
+      left: 18px;
+    }
+
+    .sw-lbl {
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    /* Role assignment */
+    .asec-lbl {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink2);
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      margin: 0 0 10px;
+    }
+
+    .role-mode {
+      display: flex;
+      gap: 3px;
+      background: var(--line2);
+      padding: 3px;
+      border-radius: 9px;
+      width: fit-content;
+      margin-bottom: 14px;
+    }
+
+    .rm-btn {
+      border: none;
+      background: none;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--ink2);
+      padding: 7px 13px;
+      border-radius: 7px;
+    }
+
+    .rm-btn.on {
+      background: var(--card);
+      color: var(--ink);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, .06);
+    }
+
+    .app-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--line2);
+    }
+
+    .app-row:last-child {
+      border-bottom: none;
+    }
+
+    .app-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+
+    .app-name {
+      font-size: 13px;
+      font-weight: 500;
+      flex: 1;
+    }
+
+    .seg {
+      display: flex;
+      background: var(--line2);
+      border-radius: 7px;
+      padding: 2px;
+      flex-shrink: 0;
+    }
+
+    .sg {
+      border: none;
+      background: none;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 5px 9px;
+      border-radius: 5px;
+      color: var(--ink2);
+    }
+
+    .sg.on {
+      background: var(--card);
+      color: var(--ink);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, .08);
+    }
+
+    .sg.on.adm {
+      background: var(--t700);
+      color: #fff;
+    }
+
+    .sg.on.usr {
+      background: var(--ink);
+      color: #fff;
+    }
+
+    .sum {
+      margin: 16px 0 0;
+      background: var(--t100);
+      border-radius: 9px;
+      padding: 11px 13px;
+      font-size: 12.5px;
+      color: var(--t900);
+      display: flex;
+      gap: 8px;
+    }
+
+    .sum svg {
+      width: 13px;
+      height: 13px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .mf {
+      padding: 14px 26px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: flex-end;
+      gap: 9px;
+    }
+
+    /* Delete confirm modal */
+    .del-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #FBE4E9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .del-icon svg {
+      width: 20px;
+      height: 20px;
+      color: var(--red);
+    }
+
+    .btn-del {
+      background: var(--red);
+      color: #fff;
+      border: none;
+      border-radius: 9px;
+      padding: 10px 18px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* Profile panel */
+    .psub {
+      display: none;
+    }
+
+    .psub.show {
+      display: block;
+    }
+
+    /* Logout confirm */
+    .logout-confirm {
+      text-align: center;
+      padding: 8px 0;
+    }
+
+    .logout-confirm p {
+      font-size: 14px;
+      color: var(--ink2);
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    @media(max-width:1100px) {
+      .app-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media(max-width:768px) {
+      #pg-app {
+        grid-template-columns: 1fr !important;
+      }
+
+      .sb {
+        display: none;
+      }
+
+      .app-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .content {
+        padding: 20px;
+      }
+
+      .form-grid,
+      .fr2 {
+        grid-template-columns: 1fr;
+      }
+
+      .profile-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- ══════════ LOGIN PAGE ══════════ -->
-<div class="page show" id="pg-login">
-  <div class="login-left">
-    <div class="login-logo">
-      <img src="https://plain-apac-prod-public.komododecks.com/202607/08/9ZraSwZxD1H9pjDzzRea/image.png" alt="MC360" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-      <span class="fallback" style="display:none;font-family:'Fraunces',serif;color:#fff;font-size:18px;font-weight:500;">MC360</span>
-    </div>
-    <div class="login-hero">
-      <h1>Maritime operations,<br><em>unified</em></h1>
-      <p>A single platform for bunker surveys, vessel inspections, sanctions screening, and more — built for the people who keep fleets moving.</p>
-    </div>
-    <div class="login-stats">
-      <div class="stat-badge"><strong>50+</strong><span>Operators</span></div>
-      <div class="stat-badge"><strong>5</strong><span>Applications</span></div>
-      <div class="stat-badge"><strong>Real-time</strong><span>Insights</span></div>
-    </div>
-  </div>
-  <div class="login-right">
-    <div class="login-form">
-      <p class="eyebrow">MaritimeConnect360</p>
-      <h2>Welcome back</h2>
-      <div class="f"><label>Email address</label><input type="email" placeholder="name@organization.com" id="loginEmail"></div>
-      <div class="f"><label>Password</label><input type="password" placeholder="••••••••" id="loginPwd"></div>
-      <a href="#" class="forgot-link" onclick="showForgot();return false;">Forgot password?</a>
-      <button class="btn-full" onclick="doLogin()">Sign in</button>
-      <div class="login-foot">By signing in, you agree to the Terms of Service and Privacy Policy.</div>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════ FORGOT PASSWORD PAGE ══════════ -->
-<div class="page" id="pg-forgot" style="background:var(--bg);align-items:center;justify-content:center;">
-  <div class="forgot-card">
-    <a href="#" class="back" onclick="showLogin();return false;">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-      Back to sign in
-    </a>
-    <div id="forgot-form-state">
-      <h2>Reset password</h2>
-      <p>Enter your work email and we'll send a reset link to your inbox.</p>
-      <div class="f"><label>Work email</label><input type="email" placeholder="name@organization.com"></div>
-      <button class="btn-full" onclick="doForgot()" style="margin-top:8px;">Send reset link</button>
-    </div>
-    <div id="forgot-sent-state" style="display:none;" class="sent-state">
-      <div class="sent-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0l-8 5-8-5"/></svg></div>
-      <h2 style="font-size:20px;margin-bottom:8px;">Check your inbox</h2>
-      <p style="color:var(--ink2);font-size:13.5px;line-height:1.6;margin-bottom:20px;">A reset link has been sent to your email. It expires in 30 minutes.</p>
-      <button class="btn-full" onclick="showLogin()">Back to sign in</button>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════ APP SHELL ══════════ -->
-<div id="pg-app" class="sb-open">
-  <!-- SIDEBAR -->
-  <nav class="sb" id="sb">
-    <div class="sb-logo">
-      <img src="https://plain-apac-prod-public.komododecks.com/202607/08/9ZraSwZxD1H9pjDzzRea/image.png" alt="MC360" onerror="this.outerHTML='<span class=\'fallback\' style=\'color:#fff;font-family:Fraunces,serif;font-size:15px;\'>MC360</span>'">
-    </div>
-    <button class="sbi on" onclick="nav('dashboard',this)">
-      <span class="tt">Dashboard</span>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>
-      <span class="lbl">Dashboard</span>
-    </button>
-    <button class="sbi" onclick="nav('applications',this)">
-      <span class="tt">Applications</span>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
-      <span class="lbl">Applications</span>
-    </button>
-    <button class="sbi" onclick="nav('users',this)">
-      <span class="tt">Users</span>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-      <span class="lbl">Users</span>
-    </button>
-    <div class="sb-gap"></div>
-    <button class="sb-toggle" id="sb-toggle" onclick="toggleSB()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-      <span class="lbl">Collapse</span>
-    </button>
-  </nav>
-
-  <!-- MAIN -->
-  <div class="main">
-    <header class="topbar">
-      <div class="search-bar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-        <input type="text" placeholder="Search applications, users, vessels…">
-        <kbd>⌘K</kbd>
+  <!-- ══════════ LOGIN PAGE ══════════ -->
+  <div class="page show" id="pg-login">
+    <div class="login-left">
+      <div class="login-logo">
+        <img src="asset/MC360logo.png" alt="MC360">
+        <span class="login-logo-text">MC360</span>
       </div>
-      <div class="tr">
-        <span class="trial-pill">Trial · 12 days left <a href="#">Upgrade</a></span>
-        <span class="role-pill">Administrator</span>
-        <button class="bell"><span class="bell-dot"></span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-        </button>
-        <button class="avatar-btn" id="avatar-btn" onclick="toggleProfile()">EE</button>
+      <div class="login-hero">
+        <h1>Maritime operations,<br><em>unified</em></h1>
+        <p>A single platform for bunker surveys, vessel inspections, sanctions screening, and more — built for the
+          people who keep fleets moving.</p>
       </div>
-    </header>
+      <div class="login-stats">
+        <div class="stat-badge"><strong>50+</strong><span>Operators</span></div>
+        <div class="stat-badge"><strong>4</strong><span>Applications</span></div>
+        <div class="stat-badge"><strong>Real-time</strong><span>Insights</span></div>
+      </div>
+    </div>
+    <div class="login-right">
+      <div class="login-form">
+        <p class="eyebrow">MaritimeConnect360</p>
+        <h2>Welcome back</h2>
+        <div class="f"><label>Email address</label><input type="email" placeholder="name@organization.com"
+            id="loginEmail"></div>
+        <div class="f"><label>Password</label><input type="password" placeholder="••••••••" id="loginPwd"></div>
+        <a href="#" class="forgot-link" onclick="showForgot();return false;">Forgot password?</a>
+        <button class="btn-full" onclick="doLogin()">Sign in</button>
+        <div class="login-foot">By signing in, you agree to the Terms of Service and Privacy Policy.</div>
+      </div>
+    </div>
+  </div>
 
-    <div class="content">
+  <!-- ══════════ FORGOT PASSWORD PAGE ══════════ -->
+  <div class="page" id="pg-forgot" style="background:var(--bg);align-items:center;justify-content:center;">
+    <div class="forgot-card">
+      <a href="#" class="back" onclick="showLogin();return false;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <path d="M19 12H5M12 5l-7 7 7 7" />
+        </svg>
+        Back to sign in
+      </a>
+      <div id="forgot-form-state">
+        <h2>Reset password</h2>
+        <p>Enter your work email and we'll send a reset link to your inbox.</p>
+        <div class="f"><label>Work email</label><input type="email" placeholder="name@organization.com"></div>
+        <button class="btn-full" onclick="doForgot()" style="margin-top:8px;">Send reset link</button>
+      </div>
+      <div id="forgot-sent-state" style="display:none;" class="sent-state">
+        <div class="sent-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0l-8 5-8-5" />
+          </svg></div>
+        <h2 style="font-size:20px;margin-bottom:8px;">Check your inbox</h2>
+        <p style="color:var(--ink2);font-size:13.5px;line-height:1.6;margin-bottom:20px;">A reset link has been sent to
+          your email. It expires in 30 minutes.</p>
+        <button class="btn-full" onclick="showLogin()">Back to sign in</button>
+      </div>
+    </div>
+  </div>
 
-      <!-- DASHBOARD -->
-      <div class="view show" id="view-dashboard">
-        <p class="page-eyebrow">Tuesday, 8 July 2026</p>
-        <h1 class="page-title">Good morning, Edwin</h1>
-        <p class="page-sub">Here's what requires your attention today.</p>
+  <!-- ══════════ APP SHELL ══════════ -->
+  <div id="pg-app" class="sb-open">
+    <!-- SIDEBAR -->
+    <nav class="sb" id="sb">
+      <div class="sb-logo">
+        <img src="asset/MC360logo.png" alt="MC360">
+        <span class="sb-name">MC360</span>
+      </div>
+      <button class="sbi on" onclick="nav('dashboard',this)">
+        <span class="tt">Dashboard</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M3 11l9-7 9 7" />
+          <path d="M5 10v10h14V10" />
+        </svg>
+        <span class="lbl">Dashboard</span>
+      </button>
+      <button class="sbi" onclick="nav('applications',this)">
+        <span class="tt">Applications</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <rect x="3" y="3" width="7" height="7" rx="1.5" />
+          <rect x="14" y="3" width="7" height="7" rx="1.5" />
+          <rect x="3" y="14" width="7" height="7" rx="1.5" />
+          <rect x="14" y="14" width="7" height="7" rx="1.5" />
+        </svg>
+        <span class="lbl">Applications</span>
+      </button>
+      <button class="sbi" onclick="nav('users',this)">
+        <span class="tt">Users</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M23 21v-2a4 4 0 00-3-3.87" />
+          <path d="M16 3.13a4 4 0 010 7.75" />
+        </svg>
+        <span class="lbl">Users</span>
+      </button>
+      <div class="sb-gap"></div>
+      <button class="sb-toggle" id="sb-toggle" onclick="toggleSB()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 18l6-6-6-6" />
+        </svg>
+        <span class="lbl">Collapse</span>
+      </button>
+    </nav>
 
-        <div class="attn-head">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--t700)" stroke-width="2"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-          <h2>Needs attention</h2>
-          <span class="attn-count">4 items across 4 applications</span>
+    <!-- MAIN -->
+    <div class="main">
+      <header class="topbar">
+        <div class="search-bar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="7" />
+            <path d="M21 21l-4.3-4.3" />
+          </svg>
+          <input type="text" placeholder="Search applications, users, vessels…">
+          <kbd>⌘K</kbd>
         </div>
-        <div class="attn-strip">
-          <div class="chip" style="--cc:var(--bunker);--cb:var(--bunker-bg);">
-            <div class="chip-top"><div class="chip-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h8l2 3v13a2 2 0 01-2 2H6a2 2 0 01-2-2V6a3 3 0 013-3z"/></svg></div><span class="chip-mod">Bunker Survey</span></div>
-            <p class="chip-text"><b>3 surveys</b> pending review before sign-off</p>
-            <span class="chip-cta">Review now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-          <div class="chip" style="--cc:var(--sanct);--cb:var(--sanct-bg);">
-            <div class="chip-top"><div class="chip-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/></svg></div><span class="chip-mod">Global Sanctions</span></div>
-            <p class="chip-text"><b>1 match</b> flagged in crew watchlist scan</p>
-            <span class="chip-cta">Investigate <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-          <div class="chip" style="--cc:var(--vc);--cb:var(--vc-bg);">
-            <div class="chip-top"><div class="chip-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 17l2-5h14l2 5"/><path d="M12 3v9"/></svg></div><span class="chip-mod">Vessel Condition</span></div>
-            <p class="chip-text"><b>2 certificates</b> expire within 7 days — MV Coral Horizon</p>
-            <span class="chip-cta">View vessel <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-          <div class="chip" style="--cc:var(--vi);--cb:var(--vi-bg);">
-            <div class="chip-top"><div class="chip-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div><span class="chip-mod">Vessel Inspection</span></div>
-            <p class="chip-text"><b>1 inspection</b> overdue for Marshall Islands Registry</p>
-            <span class="chip-cta">Open inspection <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
+        <div class="tr">
+          <span class="trial-pill">Trial · 12 days left <a href="#">Upgrade</a></span>
+          <span class="role-pill">Administrator</span>
+          <button class="bell"><span class="bell-dot"></span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+              <path d="M13.73 21a2 2 0 01-3.46 0" />
+            </svg>
+          </button>
+          <button class="avatar-btn" id="avatar-btn" onclick="toggleProfile()">EE</button>
         </div>
+      </header>
 
-        <div class="sh"><h2>Applications</h2><a href="#" onclick="nav('applications',document.querySelector('.sbi:nth-child(3)'));return false;">View all</a></div>
-        <div class="app-grid">
-          <div class="ac" style="--ic:var(--bunker);--ic-bg:var(--bunker-bg);">
-            <div class="ac-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h8l2 3v13a2 2 0 01-2 2H6a2 2 0 01-2-2V6a3 3 0 013-3z"/></svg></div>
-            <div class="ac-body"><div class="ac-top"><p class="ac-title">Bunker Quantity Survey</p><span class="ac-role">Admin</span></div><p class="ac-desc">Track and verify fuel quantity</p></div>
-            <div class="ac-foot"><button class="doc-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>Docs</button><button class="launch-btn">Launch <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"/></svg></button></div>
+      <div class="content">
+
+        <!-- DASHBOARD -->
+        <div class="view show" id="view-dashboard">
+          <p class="page-eyebrow">Tuesday, 8 July 2026</p>
+          <h1 class="page-title">Good morning, Edwin</h1>
+          <p class="page-sub">Here's what requires your attention today.</p>
+
+          <div class="attn-head">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--t700)" stroke-width="2">
+              <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+              <path d="M13.73 21a2 2 0 01-3.46 0" />
+            </svg>
+            <h2>Needs attention</h2>
+            <span class="attn-count">4 items across 4 applications</span>
           </div>
-          <div class="ac" style="--ic:var(--vc);--ic-bg:var(--vc-bg);">
-            <div class="ac-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 17l2-5h14l2 5"/><path d="M5 17v3h14v-3"/><path d="M12 3v9"/></svg></div>
-            <div class="ac-body"><div class="ac-top"><p class="ac-title">Vessel Condition Survey</p><span class="ac-role">Admin</span></div><p class="ac-desc">Hull and structural condition reports</p></div>
-            <div class="ac-foot"><button class="doc-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>Docs</button><button class="launch-btn">Launch <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"/></svg></button></div>
+          <div class="attn-strip">
+            <div class="chip" style="--cc:var(--bunker);--cb:var(--bunker-bg);">
+              <div class="chip-top">
+                <div class="chip-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M6 3h8l2 3v13a2 2 0 01-2 2H6a2 2 0 01-2-2V6a3 3 0 013-3z" />
+                  </svg></div><span class="chip-mod">Bunker Survey</span>
+              </div>
+              <p class="chip-text"><b>3 surveys</b> pending review before sign-off</p>
+              <span class="chip-cta">Review now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2.5">
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg></span>
+            </div>
+            <div class="chip" style="--cc:var(--sanct);--cb:var(--sanct-bg);">
+              <div class="chip-top">
+                <div class="chip-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z" />
+                  </svg></div><span class="chip-mod">Global Sanctions</span>
+              </div>
+              <p class="chip-text"><b>1 match</b> flagged in crew watchlist scan</p>
+              <span class="chip-cta">Investigate <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2.5">
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg></span>
+            </div>
+            <div class="chip" style="--cc:var(--vc);--cb:var(--vc-bg);">
+              <div class="chip-top">
+                <div class="chip-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M3 17l2-5h14l2 5" />
+                    <path d="M12 3v9" />
+                  </svg></div><span class="chip-mod">Vessel Condition</span>
+              </div>
+              <p class="chip-text"><b>2 certificates</b> expire within 7 days — MV Coral Horizon</p>
+              <span class="chip-cta">View vessel <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2.5">
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg></span>
+            </div>
+            <div class="chip" style="--cc:var(--vi);--cb:var(--vi-bg);">
+              <div class="chip-top">
+                <div class="chip-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <circle cx="11" cy="11" r="7" />
+                    <path d="M21 21l-4.3-4.3" />
+                  </svg></div><span class="chip-mod">Vessel Inspection</span>
+              </div>
+              <p class="chip-text"><b>1 inspection</b> overdue for Marshall Islands Registry</p>
+              <span class="chip-cta">Open inspection <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2.5">
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg></span>
+            </div>
           </div>
-          <div class="ac" style="--ic:var(--vi);--ic-bg:var(--vi-bg);">
-            <div class="ac-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
-            <div class="ac-body"><div class="ac-top"><p class="ac-title">Vessel Inspection</p><span class="ac-role">User</span></div><p class="ac-desc">Registry-grade inspection workflows</p></div>
-            <div class="ac-foot"><button class="doc-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>Docs</button><button class="launch-btn">Launch <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"/></svg></button></div>
+
+          <div class="sh">
+            <h2>Applications</h2><a href="#"
+              onclick="nav('applications',document.querySelector('.sbi:nth-child(3)'));return false;">View all</a>
           </div>
-          <div class="ac" style="--ic:var(--sanct);--ic-bg:var(--sanct-bg);">
-            <div class="ac-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/></svg></div>
-            <div class="ac-body"><div class="ac-top"><p class="ac-title">Global Sanctions</p><span class="ac-role">Admin</span></div><p class="ac-desc">Crew and vessel watchlist screening</p></div>
-            <div class="ac-foot"><button class="doc-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>Docs</button><button class="launch-btn">Launch <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"/></svg></button></div>
-          </div>
-          <!-- <div class="ac ac-soon" style="--ic:var(--sched);--ic-bg:var(--sched-bg);">
+          <div class="app-grid">
+            <div class="ac" style="--ic:var(--bunker);--ic-bg:var(--bunker-bg);">
+              <div class="ac-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M6 3h8l2 3v13a2 2 0 01-2 2H6a2 2 0 01-2-2V6a3 3 0 013-3z" />
+                </svg></div>
+              <div class="ac-body">
+                <div class="ac-top">
+                  <p class="ac-title">Bunker Quantity Survey</p><span class="ac-role">Admin</span>
+                </div>
+                <p class="ac-desc">Track and verify fuel quantity</p>
+              </div>
+              <div class="ac-foot"><button class="doc-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                    <path d="M14 2v6h6" />
+                  </svg>Docs</button><button class="launch-btn">Launch <svg viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.5">
+                    <path d="M7 17L17 7M7 7h10v10" />
+                  </svg></button></div>
+            </div>
+            <div class="ac" style="--ic:var(--vc);--ic-bg:var(--vc-bg);">
+              <div class="ac-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M3 17l2-5h14l2 5" />
+                  <path d="M5 17v3h14v-3" />
+                  <path d="M12 3v9" />
+                </svg></div>
+              <div class="ac-body">
+                <div class="ac-top">
+                  <p class="ac-title">Vessel Condition Survey</p><span class="ac-role">Admin</span>
+                </div>
+                <p class="ac-desc">Hull and structural condition reports</p>
+              </div>
+              <div class="ac-foot"><button class="doc-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                    <path d="M14 2v6h6" />
+                  </svg>Docs</button><button class="launch-btn">Launch <svg viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.5">
+                    <path d="M7 17L17 7M7 7h10v10" />
+                  </svg></button></div>
+            </div>
+            <div class="ac" style="--ic:var(--vi);--ic-bg:var(--vi-bg);">
+              <div class="ac-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <circle cx="11" cy="11" r="7" />
+                  <path d="M21 21l-4.3-4.3" />
+                </svg></div>
+              <div class="ac-body">
+                <div class="ac-top">
+                  <p class="ac-title">Vessel Inspection</p><span class="ac-role">User</span>
+                </div>
+                <p class="ac-desc">Registry-grade inspection workflows</p>
+              </div>
+              <div class="ac-foot"><button class="doc-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                    <path d="M14 2v6h6" />
+                  </svg>Docs</button><button class="launch-btn">Launch <svg viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.5">
+                    <path d="M7 17L17 7M7 7h10v10" />
+                  </svg></button></div>
+            </div>
+            <div class="ac" style="--ic:var(--sanct);--ic-bg:var(--sanct-bg);">
+              <div class="ac-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z" />
+                </svg></div>
+              <div class="ac-body">
+                <div class="ac-top">
+                  <p class="ac-title">Global Sanctions</p><span class="ac-role">Admin</span>
+                </div>
+                <p class="ac-desc">Crew and vessel watchlist screening</p>
+              </div>
+              <div class="ac-foot"><button class="doc-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                    <path d="M14 2v6h6" />
+                  </svg>Docs</button><button class="launch-btn">Launch <svg viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.5">
+                    <path d="M7 17L17 7M7 7h10v10" />
+                  </svg></button></div>
+            </div>
+            <!-- <div class="ac ac-soon" style="--ic:var(--sched);--ic-bg:var(--sched-bg);">
             <span class="bm">Coming soon</span>
             <div class="ac-top"><div class="ac-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18"/></svg></div></div>
             <div><p class="ac-title">Scheduling</p><p class="ac-desc">Fleet-wide survey and inspection calendar</p></div>
             <div class="ac-foot"><button class="launch-btn" style="background:var(--ink2);">Notify me</button></div>
           </div> -->
+          </div>
+
+          <div class="activity">
+            <h3>Recent activity</h3>
+            <div class="ar">
+              <div class="ar-dot" style="background:var(--bunker);margin-top:5px;flex-shrink:0;"></div>
+              <div>
+                <div class="ar-text"><b>Lavanya R.</b> submitted Bunker Survey #BQ-2291 for MV Coral Horizon</div>
+                <div class="ar-time">Today, 08:14</div>
+              </div>
+            </div>
+            <div class="ar">
+              <div class="ar-dot" style="background:var(--sanct);margin-top:5px;flex-shrink:0;"></div>
+              <div>
+                <div class="ar-text">Sanctions scan flagged 1 potential match — pending review</div>
+                <div class="ar-time">Today, 07:52</div>
+              </div>
+            </div>
+            <div class="ar">
+              <div class="ar-dot" style="background:var(--t500);margin-top:5px;flex-shrink:0;"></div>
+              <div>
+                <div class="ar-text"><b>Bharath K.</b> was granted Admin access to Vessel Condition Survey</div>
+                <div class="ar-time">Yesterday, 18:20</div>
+              </div>
+            </div>
+            <div class="ar">
+              <div class="ar-dot" style="background:var(--vi);margin-top:5px;flex-shrink:0;"></div>
+              <div>
+                <div class="ar-text">Inspection report #VI-0087 approved and filed with registry</div>
+                <div class="ar-time">Yesterday, 15:04</div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="activity">
-          <h3>Recent activity</h3>
-          <div class="ar"><div class="ar-dot" style="background:var(--bunker);margin-top:5px;flex-shrink:0;"></div><div><div class="ar-text"><b>Lavanya R.</b> submitted Bunker Survey #BQ-2291 for MV Coral Horizon</div><div class="ar-time">Today, 08:14</div></div></div>
-          <div class="ar"><div class="ar-dot" style="background:var(--sanct);margin-top:5px;flex-shrink:0;"></div><div><div class="ar-text">Sanctions scan flagged 1 potential match — pending review</div><div class="ar-time">Today, 07:52</div></div></div>
-          <div class="ar"><div class="ar-dot" style="background:var(--t500);margin-top:5px;flex-shrink:0;"></div><div><div class="ar-text"><b>Bharath K.</b> was granted Admin access to Vessel Condition Survey</div><div class="ar-time">Yesterday, 18:20</div></div></div>
-          <div class="ar"><div class="ar-dot" style="background:var(--vi);margin-top:5px;flex-shrink:0;"></div><div><div class="ar-text">Inspection report #VI-0087 approved and filed with registry</div><div class="ar-time">Yesterday, 15:04</div></div></div>
+        <!-- APPLICATIONS (full app list view) -->
+        <div class="view" id="view-applications">
+          <p class="page-eyebrow">MaritimeConnect360</p>
+          <h1 class="page-title">Applications</h1>
+          <p class="page-sub">Select an application to launch or manage your access.</p>
+          <div class="app-grid-v">
+            <div class="ac" style="--ic:var(--bunker);--ic-bg:var(--bunker-bg);">
+              <div class="ac-top">
+                <div class="ac-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M6 3h8l2 3v13a2 2 0 01-2 2H6a2 2 0 01-2-2V6a3 3 0 013-3z" />
+                  </svg></div><span class="ac-role">Admin</span>
+              </div>
+              <div class="ac-body">
+                <p class="ac-title">Bunker Quantity Survey</p>
+                <p class="ac-desc">Track and verify fuel quantity across all active surveys</p>
+              </div>
+              <div class="ac-foot"><button class="doc-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                    <path d="M14 2v6h6" />
+                  </svg>Docs</button><button class="launch-btn">Launch <svg viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.5">
+                    <path d="M7 17L17 7M7 7h10v10" />
+                  </svg></button></div>
+            </div>
+            <div class="ac" style="--ic:var(--vc);--ic-bg:var(--vc-bg);">
+              <div class="ac-top">
+                <div class="ac-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M3 17l2-5h14l2 5" />
+                    <path d="M5 17v3h14v-3" />
+                    <path d="M12 3v9" />
+                  </svg></div><span class="ac-role">Admin</span>
+              </div>
+              <div class="ac-body">
+                <p class="ac-title">Vessel Condition Survey</p>
+                <p class="ac-desc">Structural and hull condition reporting for your fleet</p>
+              </div>
+              <div class="ac-foot"><button class="doc-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                    <path d="M14 2v6h6" />
+                  </svg>Docs</button><button class="launch-btn">Launch <svg viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.5">
+                    <path d="M7 17L17 7M7 7h10v10" />
+                  </svg></button></div>
+            </div>
+            <div class="ac" style="--ic:var(--vi);--ic-bg:var(--vi-bg);">
+              <div class="ac-top">
+                <div class="ac-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <circle cx="11" cy="11" r="7" />
+                    <path d="M21 21l-4.3-4.3" />
+                  </svg></div><span class="ac-role">User</span>
+              </div>
+              <div class="ac-body">
+                <p class="ac-title">Vessel Inspection</p>
+                <p class="ac-desc">Registry-grade inspection workflows and report filing</p>
+              </div>
+              <div class="ac-foot"><button class="doc-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                    <path d="M14 2v6h6" />
+                  </svg>Docs</button><button class="launch-btn">Launch <svg viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.5">
+                    <path d="M7 17L17 7M7 7h10v10" />
+                  </svg></button></div>
+            </div>
+            <div class="ac" style="--ic:var(--sanct);--ic-bg:var(--sanct-bg);">
+              <div class="ac-top">
+                <div class="ac-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z" />
+                  </svg></div><span class="ac-role">Admin</span>
+              </div>
+              <div class="ac-body">
+                <p class="ac-title">Global Sanctions</p>
+                <p class="ac-desc">Real-time crew and vessel watchlist screening</p>
+              </div>
+              <div class="ac-foot"><button class="doc-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                    <path d="M14 2v6h6" />
+                  </svg>Docs</button><button class="launch-btn">Launch <svg viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.5">
+                    <path d="M7 17L17 7M7 7h10v10" />
+                  </svg></button></div>
+            </div>
+            <div class="ac ac-soon" style="--ic:var(--sched);--ic-bg:var(--sched-bg);">
+              <span class="bm">Coming soon</span>
+              <div class="ac-top">
+                <div class="ac-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <rect x="3" y="5" width="18" height="16" rx="2" />
+                    <path d="M3 10h18" />
+                  </svg></div>
+              </div>
+              <div class="ac-body">
+                <p class="ac-title">Scheduling</p>
+                <p class="ac-desc">Fleet-wide survey and inspection calendar</p>
+              </div>
+              <div class="ac-foot"><button class="launch-btn" style="background:var(--ink2);">Join waitlist</button>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <!-- APPLICATIONS (full app list view) -->
-      <div class="view" id="view-applications">
-        <p class="page-eyebrow">MaritimeConnect360</p>
-        <h1 class="page-title">Applications</h1>
-        <p class="page-sub">Select an application to launch or manage your access.</p>
-        <div class="app-grid-v">
-          <div class="ac" style="--ic:var(--bunker);--ic-bg:var(--bunker-bg);">
-            <div class="ac-top"><div class="ac-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h8l2 3v13a2 2 0 01-2 2H6a2 2 0 01-2-2V6a3 3 0 013-3z"/></svg></div><span class="ac-role">Admin</span></div>
-            <div class="ac-body"><p class="ac-title">Bunker Quantity Survey</p><p class="ac-desc">Track and verify fuel quantity across all active surveys</p></div>
-            <div class="ac-foot"><button class="doc-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>Docs</button><button class="launch-btn">Launch <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"/></svg></button></div>
-          </div>
-          <div class="ac" style="--ic:var(--vc);--ic-bg:var(--vc-bg);">
-            <div class="ac-top"><div class="ac-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 17l2-5h14l2 5"/><path d="M5 17v3h14v-3"/><path d="M12 3v9"/></svg></div><span class="ac-role">Admin</span></div>
-            <div class="ac-body"><p class="ac-title">Vessel Condition Survey</p><p class="ac-desc">Structural and hull condition reporting for your fleet</p></div>
-            <div class="ac-foot"><button class="doc-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>Docs</button><button class="launch-btn">Launch <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"/></svg></button></div>
-          </div>
-          <div class="ac" style="--ic:var(--vi);--ic-bg:var(--vi-bg);">
-            <div class="ac-top"><div class="ac-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div><span class="ac-role">User</span></div>
-            <div class="ac-body"><p class="ac-title">Vessel Inspection</p><p class="ac-desc">Registry-grade inspection workflows and report filing</p></div>
-            <div class="ac-foot"><button class="doc-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>Docs</button><button class="launch-btn">Launch <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"/></svg></button></div>
-          </div>
-          <div class="ac" style="--ic:var(--sanct);--ic-bg:var(--sanct-bg);">
-            <div class="ac-top"><div class="ac-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/></svg></div><span class="ac-role">Admin</span></div>
-            <div class="ac-body"><p class="ac-title">Global Sanctions</p><p class="ac-desc">Real-time crew and vessel watchlist screening</p></div>
-            <div class="ac-foot"><button class="doc-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>Docs</button><button class="launch-btn">Launch <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"/></svg></button></div>
-          </div>
-          <div class="ac ac-soon" style="--ic:var(--sched);--ic-bg:var(--sched-bg);">
-            <span class="bm">Coming soon</span>
-            <div class="ac-top"><div class="ac-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18"/></svg></div></div>
-            <div class="ac-body"><p class="ac-title">Scheduling</p><p class="ac-desc">Fleet-wide survey and inspection calendar</p></div>
-            <div class="ac-foot"><button class="launch-btn" style="background:var(--ink2);">Join waitlist</button></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- USERS -->
-      <div class="view" id="view-users">
-        <div class="users-hd">
-          <h1>Users</h1>
-          <button class="btn-primary" onclick="openModal('modal-add')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>Add user
-          </button>
-        </div>
-        <p class="users-sub">9 users across 4 applications</p>
-        <div class="table-top">
-          <div class="tabs">
-            <button class="tab on" onclick="filterTab(this)">All · 9</button>
-            <button class="tab" onclick="filterTab(this)">Active · 8</button>
-            <button class="tab" onclick="filterTab(this)">Inactive · 1</button>
-          </div>
-          <div class="ts">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-            <input type="text" placeholder="Search users">
-          </div>
-        </div>
-        <div class="bulk" id="bulk-bar">
-          <span class="bulk-count"><span id="bulk-n">0</span> selected</span>
-          <div class="bulk-acts">
-            <button>Reset password</button>
-            <button>Deactivate</button>
-            <button class="del" onclick="openModal('modal-del')">Delete</button>
-          </div>
-        </div>
-        <table>
-          <thead><tr>
-            <th style="width:34px;"><input type="checkbox" class="chk" onchange="chkAll(this)"></th>
-            <th>User</th><th>Status</th><th>Access</th><th style="width:80px;"></th>
-          </tr></thead>
-          <tbody id="user-tbody">
-            <tr>
-              <td><input type="checkbox" class="chk rchk" onchange="chkRow()"></td>
-              <td><div class="un">Lavanya Ramesh</div><div class="ue">lavanya.r@bsolsystems.com</div></td>
-              <td><span class="sdot">Active</span></td>
-              <td><button class="acc-chip" onclick="toggleAcc(this)">4 apps · Admin ×3, User ×1 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button></td>
-              <td><div class="row-acts"><button class="ic-btn" onclick="openEdit('Lavanya Ramesh','lavanya.r@bsolsystems.com')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="ic-btn del-btn" onclick="openModal('modal-del')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></button></div></td>
-            </tr>
-            <tr class="acc-row"><td colspan="5"><div class="acc-det"><div class="adr"><span class="adr-dot" style="background:var(--bunker);"></span>Bunker Quantity Survey — <b>Admin</b></div><div class="adr"><span class="adr-dot" style="background:var(--vc);"></span>Vessel Condition Survey — <b>Admin</b></div><div class="adr"><span class="adr-dot" style="background:var(--sanct);"></span>Global Sanctions — <b>Admin</b></div><div class="adr"><span class="adr-dot" style="background:var(--vi);"></span>Vessel Inspection — <b>User</b></div></div></td></tr>
-            <tr>
-              <td><input type="checkbox" class="chk rchk" onchange="chkRow()"></td>
-              <td><div class="un">Bharath Kumar</div><div class="ue">bharath.k@bsolsystems.com</div></td>
-              <td><span class="sdot">Active</span></td>
-              <td><button class="acc-chip" onclick="toggleAcc(this)">2 apps · Admin ×1, User ×1 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button></td>
-              <td><div class="row-acts"><button class="ic-btn" onclick="openEdit('Bharath Kumar','bharath.k@bsolsystems.com')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="ic-btn del-btn" onclick="openModal('modal-del')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></button></div></td>
-            </tr>
-            <tr class="acc-row"><td colspan="5"><div class="acc-det"><div class="adr"><span class="adr-dot" style="background:var(--vc);"></span>Vessel Condition Survey — <b>Admin</b></div><div class="adr"><span class="adr-dot" style="background:var(--vi);"></span>Vessel Inspection — <b>User</b></div></div></td></tr>
-            <tr>
-              <td><input type="checkbox" class="chk rchk" onchange="chkRow()"></td>
-              <td><div class="un">Meera Iyer</div><div class="ue">meera.i@bsolsystems.com</div></td>
-              <td><span class="sdot off">Inactive</span></td>
-              <td><button class="acc-chip" onclick="toggleAcc(this)">1 app · User ×1 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button></td>
-              <td><div class="row-acts"><button class="ic-btn" onclick="openEdit('Meera Iyer','meera.i@bsolsystems.com')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="ic-btn del-btn" onclick="openModal('modal-del')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></button></div></td>
-            </tr>
-            <tr class="acc-row"><td colspan="5"><div class="acc-det"><div class="adr"><span class="adr-dot" style="background:var(--sanct);"></span>Global Sanctions — <b>User</b></div></div></td></tr>
-            <tr>
-              <td><input type="checkbox" class="chk rchk" onchange="chkRow()"></td>
-              <td><div class="un">Edwin Emmanuel</div><div class="ue">edwin@bsolsystems.com</div></td>
-              <td><span class="sdot">Active</span></td>
-              <td><button class="acc-chip" onclick="toggleAcc(this)">4 apps · Admin ×4 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button></td>
-              <td><div class="row-acts"><button class="ic-btn" onclick="openEdit('Edwin Emmanuel','edwin@bsolsystems.com')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="ic-btn del-btn" onclick="openModal('modal-del')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></button></div></td>
-            </tr>
-            <tr class="acc-row"><td colspan="5"><div class="acc-det"><div class="adr"><span class="adr-dot" style="background:var(--bunker);"></span>Bunker Quantity Survey — <b>Admin</b></div><div class="adr"><span class="adr-dot" style="background:var(--vc);"></span>Vessel Condition Survey — <b>Admin</b></div><div class="adr"><span class="adr-dot" style="background:var(--vi);"></span>Vessel Inspection — <b>Admin</b></div><div class="adr"><span class="adr-dot" style="background:var(--sanct);"></span>Global Sanctions — <b>Admin</b></div></div></td></tr>
-            <tr>
-              <td><input type="checkbox" class="chk rchk" onchange="chkRow()"></td>
-              <td><div class="un">Harsha Vardhan</div><div class="ue">harsha.v@bsolsystems.com</div></td>
-              <td><span class="sdot">Active</span></td>
-              <td><button class="acc-chip" onclick="toggleAcc(this)">3 apps · Admin ×2, User ×1 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button></td>
-              <td><div class="row-acts"><button class="ic-btn" onclick="openEdit('Harsha Vardhan','harsha.v@bsolsystems.com')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="ic-btn del-btn" onclick="openModal('modal-del')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></button></div></td>
-            </tr>
-            <tr class="acc-row"><td colspan="5"><div class="acc-det"><div class="adr"><span class="adr-dot" style="background:var(--bunker);"></span>Bunker Quantity Survey — <b>Admin</b></div><div class="adr"><span class="adr-dot" style="background:var(--vc);"></span>Vessel Condition Survey — <b>Admin</b></div><div class="adr"><span class="adr-dot" style="background:var(--vi);"></span>Vessel Inspection — <b>User</b></div></div></td></tr>
-            <tr>
-              <td><input type="checkbox" class="chk rchk" onchange="chkRow()"></td>
-              <td><div class="un">Chetan Naik</div><div class="ue">chetan.n@bsolsystems.com</div></td>
-              <td><span class="sdot">Active</span></td>
-              <td><button class="acc-chip" onclick="toggleAcc(this)">2 apps · User ×2 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button></td>
-              <td><div class="row-acts"><button class="ic-btn" onclick="openEdit('Chetan Naik','chetan.n@bsolsystems.com')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="ic-btn del-btn" onclick="openModal('modal-del')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></button></div></td>
-            </tr>
-            <tr class="acc-row"><td colspan="5"><div class="acc-det"><div class="adr"><span class="adr-dot" style="background:var(--vi);"></span>Vessel Inspection — <b>User</b></div><div class="adr"><span class="adr-dot" style="background:var(--sanct);"></span>Global Sanctions — <b>User</b></div></div></td></tr>
-            <tr>
-              <td><input type="checkbox" class="chk rchk" onchange="chkRow()"></td>
-              <td><div class="un">Sanjay Mehta</div><div class="ue">sanjay.m@bsolsystems.com</div></td>
-              <td><span class="sdot">Active</span></td>
-              <td><button class="acc-chip" onclick="toggleAcc(this)">3 apps · Admin ×1, User ×2 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button></td>
-              <td><div class="row-acts"><button class="ic-btn" onclick="openEdit('Sanjay Mehta','sanjay.m@bsolsystems.com')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="ic-btn del-btn" onclick="openModal('modal-del')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></button></div></td>
-            </tr>
-            <tr class="acc-row"><td colspan="5"><div class="acc-det"><div class="adr"><span class="adr-dot" style="background:var(--bunker);"></span>Bunker Quantity Survey — <b>Admin</b></div><div class="adr"><span class="adr-dot" style="background:var(--vc);"></span>Vessel Condition Survey — <b>User</b></div><div class="adr"><span class="adr-dot" style="background:var(--vi);"></span>Vessel Inspection — <b>User</b></div></div></td></tr>
-            <tr>
-              <td><input type="checkbox" class="chk rchk" onchange="chkRow()"></td>
-              <td><div class="un">Benjamin Raj</div><div class="ue">benjamin.r@bsolsystems.com</div></td>
-              <td><span class="sdot">Active</span></td>
-              <td><button class="acc-chip" onclick="toggleAcc(this)">2 apps · Admin ×2 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button></td>
-              <td><div class="row-acts"><button class="ic-btn" onclick="openEdit('Benjamin Raj','benjamin.r@bsolsystems.com')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="ic-btn del-btn" onclick="openModal('modal-del')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></button></div></td>
-            </tr>
-            <tr class="acc-row"><td colspan="5"><div class="acc-det"><div class="adr"><span class="adr-dot" style="background:var(--sanct);"></span>Global Sanctions — <b>Admin</b></div><div class="adr"><span class="adr-dot" style="background:var(--vc);"></span>Vessel Condition Survey — <b>Admin</b></div></div></td></tr>
-            <tr>
-              <td><input type="checkbox" class="chk rchk" onchange="chkRow()"></td>
-              <td><div class="un">Amith Shetty</div><div class="ue">amith.s@bsolsystems.com</div></td>
-              <td><span class="sdot off">Inactive</span></td>
-              <td><button class="acc-chip" onclick="toggleAcc(this)">1 app · User ×1 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button></td>
-              <td><div class="row-acts"><button class="ic-btn" onclick="openEdit('Amith Shetty','amith.s@bsolsystems.com')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="ic-btn del-btn" onclick="openModal('modal-del')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></button></div></td>
-            </tr>
-            <tr class="acc-row"><td colspan="5"><div class="acc-det"><div class="adr"><span class="adr-dot" style="background:var(--bunker);"></span>Bunker Quantity Survey — <b>User</b></div></div></td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- PROFILE -->
-      <div class="view" id="view-profile">
-        <p class="page-eyebrow">Account</p>
-        <h1 class="page-title">Profile</h1>
-        <div class="profile-grid" style="margin-top:20px;">
-          <div class="profile-nav">
-            <button class="pnav-item on" onclick="showPsub('my-profile',this)">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>My profile
-            </button>
-            <button class="pnav-item" onclick="showPsub('change-password',this)">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>Change password
-            </button>
-            <div class="pnav-sep"></div>
-            <button class="pnav-item danger" onclick="openModal('modal-logout')">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sign out
+        <!-- USERS -->
+        <div class="view" id="view-users">
+          <div class="users-hd">
+            <h1>Users</h1>
+            <button class="btn-primary" onclick="openModal('modal-add')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M12 5v14M5 12h14" />
+              </svg>Add user
             </button>
           </div>
-          <div class="pcontent">
-            <div class="psub show" id="psub-my-profile">
-              <h2>My profile</h2>
-              <p class="pdesc">Manage your name, email address, and display preferences.</p>
-              <div class="avatar-block">
-                <div class="big-avatar">EE</div>
-                <div class="avatar-info">
-                  <strong>Edwin Emmanuel</strong>
-                  <span>Administrator</span>
-                  <div class="avatar-upload">Change photo</div>
+          <p class="users-sub">9 users across 4 applications</p>
+          <div class="table-top">
+            <div class="tabs">
+              <button class="tab on" onclick="filterTab(this)">All · 9</button>
+              <button class="tab" onclick="filterTab(this)">Active · 8</button>
+              <button class="tab" onclick="filterTab(this)">Inactive · 1</button>
+            </div>
+            <div class="ts">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="7" />
+                <path d="M21 21l-4.3-4.3" />
+              </svg>
+              <input type="text" placeholder="Search users">
+            </div>
+          </div>
+          <div class="bulk" id="bulk-bar">
+            <span class="bulk-count"><span id="bulk-n">0</span> selected</span>
+            <div class="bulk-acts">
+              <button>Reset password</button>
+              <button>Deactivate</button>
+              <button class="del" onclick="openModal('modal-del')">Delete</button>
+            </div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th style="width:34px;"><input type="checkbox" class="chk" onchange="chkAll(this)"></th>
+                <th>User</th>
+                <th>Status</th>
+                <th>Access</th>
+                <th style="width:80px;"></th>
+              </tr>
+            </thead>
+            <tbody id="user-tbody">
+              <tr>
+                <td><input type="checkbox" class="chk rchk" onchange="chkRow()"></td>
+                <td>
+                  <div class="un">Lavanya Ramesh</div>
+                  <div class="ue">lavanya.r@bsolsystems.com</div>
+                </td>
+                <td><span class="sdot">Active</span></td>
+                <td><button class="acc-chip" onclick="toggleAcc(this)">4 apps · Admin ×3, User ×1 <svg
+                      viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <path d="M6 9l6 6 6-6" />
+                    </svg></button></td>
+                <td>
+                  <div class="row-acts"><button class="ic-btn"
+                      onclick="openEdit('Lavanya Ramesh','lavanya.r@bsolsystems.com')"><svg viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                        <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                      </svg></button><button class="ic-btn del-btn" onclick="openModal('modal-del')"><svg
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <polyline points="3 6 5 6 21 6" />
+                        <path d="M19 6l-1 14H6L5 6" />
+                        <path d="M10 11v6M14 11v6" />
+                      </svg></button></div>
+                </td>
+              </tr>
+              <tr class="acc-row">
+                <td colspan="5">
+                  <div class="acc-det">
+                    <div class="adr"><span class="adr-dot" style="background:var(--bunker);"></span>Bunker Quantity
+                      Survey — <b>Admin</b></div>
+                    <div class="adr"><span class="adr-dot" style="background:var(--vc);"></span>Vessel Condition Survey
+                      — <b>Admin</b></div>
+                    <div class="adr"><span class="adr-dot" style="background:var(--sanct);"></span>Global Sanctions —
+                      <b>Admin</b>
+                    </div>
+                    <div class="adr"><span class="adr-dot" style="background:var(--vi);"></span>Vessel Inspection —
+                      <b>User</b>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="chk rchk" onchange="chkRow()"></td>
+                <td>
+                  <div class="un">Bharath Kumar</div>
+                  <div class="ue">bharath.k@bsolsystems.com</div>
+                </td>
+                <td><span class="sdot">Active</span></td>
+                <td><button class="acc-chip" onclick="toggleAcc(this)">2 apps · Admin ×1, User ×1 <svg
+                      viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <path d="M6 9l6 6 6-6" />
+                    </svg></button></td>
+                <td>
+                  <div class="row-acts"><button class="ic-btn"
+                      onclick="openEdit('Bharath Kumar','bharath.k@bsolsystems.com')"><svg viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                        <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                      </svg></button><button class="ic-btn del-btn" onclick="openModal('modal-del')"><svg
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <polyline points="3 6 5 6 21 6" />
+                        <path d="M19 6l-1 14H6L5 6" />
+                        <path d="M10 11v6M14 11v6" />
+                      </svg></button></div>
+                </td>
+              </tr>
+              <tr class="acc-row">
+                <td colspan="5">
+                  <div class="acc-det">
+                    <div class="adr"><span class="adr-dot" style="background:var(--vc);"></span>Vessel Condition Survey
+                      — <b>Admin</b></div>
+                    <div class="adr"><span class="adr-dot" style="background:var(--vi);"></span>Vessel Inspection —
+                      <b>User</b>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="chk rchk" onchange="chkRow()"></td>
+                <td>
+                  <div class="un">Meera Iyer</div>
+                  <div class="ue">meera.i@bsolsystems.com</div>
+                </td>
+                <td><span class="sdot off">Inactive</span></td>
+                <td><button class="acc-chip" onclick="toggleAcc(this)">1 app · User ×1 <svg viewBox="0 0 24 24"
+                      fill="none" stroke="currentColor" stroke-width="2.5">
+                      <path d="M6 9l6 6 6-6" />
+                    </svg></button></td>
+                <td>
+                  <div class="row-acts"><button class="ic-btn"
+                      onclick="openEdit('Meera Iyer','meera.i@bsolsystems.com')"><svg viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.8">
+                        <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                        <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                      </svg></button><button class="ic-btn del-btn" onclick="openModal('modal-del')"><svg
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <polyline points="3 6 5 6 21 6" />
+                        <path d="M19 6l-1 14H6L5 6" />
+                        <path d="M10 11v6M14 11v6" />
+                      </svg></button></div>
+                </td>
+              </tr>
+              <tr class="acc-row">
+                <td colspan="5">
+                  <div class="acc-det">
+                    <div class="adr"><span class="adr-dot" style="background:var(--sanct);"></span>Global Sanctions —
+                      <b>User</b>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="chk rchk" onchange="chkRow()"></td>
+                <td>
+                  <div class="un">Edwin Emmanuel</div>
+                  <div class="ue">edwin@bsolsystems.com</div>
+                </td>
+                <td><span class="sdot">Active</span></td>
+                <td><button class="acc-chip" onclick="toggleAcc(this)">4 apps · Admin ×4 <svg viewBox="0 0 24 24"
+                      fill="none" stroke="currentColor" stroke-width="2.5">
+                      <path d="M6 9l6 6 6-6" />
+                    </svg></button></td>
+                <td>
+                  <div class="row-acts"><button class="ic-btn"
+                      onclick="openEdit('Edwin Emmanuel','edwin@bsolsystems.com')"><svg viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.8">
+                        <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                        <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                      </svg></button><button class="ic-btn del-btn" onclick="openModal('modal-del')"><svg
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <polyline points="3 6 5 6 21 6" />
+                        <path d="M19 6l-1 14H6L5 6" />
+                        <path d="M10 11v6M14 11v6" />
+                      </svg></button></div>
+                </td>
+              </tr>
+              <tr class="acc-row">
+                <td colspan="5">
+                  <div class="acc-det">
+                    <div class="adr"><span class="adr-dot" style="background:var(--bunker);"></span>Bunker Quantity
+                      Survey — <b>Admin</b></div>
+                    <div class="adr"><span class="adr-dot" style="background:var(--vc);"></span>Vessel Condition Survey
+                      — <b>Admin</b></div>
+                    <div class="adr"><span class="adr-dot" style="background:var(--vi);"></span>Vessel Inspection —
+                      <b>Admin</b>
+                    </div>
+                    <div class="adr"><span class="adr-dot" style="background:var(--sanct);"></span>Global Sanctions —
+                      <b>Admin</b>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="chk rchk" onchange="chkRow()"></td>
+                <td>
+                  <div class="un">Harsha Vardhan</div>
+                  <div class="ue">harsha.v@bsolsystems.com</div>
+                </td>
+                <td><span class="sdot">Active</span></td>
+                <td><button class="acc-chip" onclick="toggleAcc(this)">3 apps · Admin ×2, User ×1 <svg
+                      viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <path d="M6 9l6 6 6-6" />
+                    </svg></button></td>
+                <td>
+                  <div class="row-acts"><button class="ic-btn"
+                      onclick="openEdit('Harsha Vardhan','harsha.v@bsolsystems.com')"><svg viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                        <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                      </svg></button><button class="ic-btn del-btn" onclick="openModal('modal-del')"><svg
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <polyline points="3 6 5 6 21 6" />
+                        <path d="M19 6l-1 14H6L5 6" />
+                        <path d="M10 11v6M14 11v6" />
+                      </svg></button></div>
+                </td>
+              </tr>
+              <tr class="acc-row">
+                <td colspan="5">
+                  <div class="acc-det">
+                    <div class="adr"><span class="adr-dot" style="background:var(--bunker);"></span>Bunker Quantity
+                      Survey — <b>Admin</b></div>
+                    <div class="adr"><span class="adr-dot" style="background:var(--vc);"></span>Vessel Condition Survey
+                      — <b>Admin</b></div>
+                    <div class="adr"><span class="adr-dot" style="background:var(--vi);"></span>Vessel Inspection —
+                      <b>User</b>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="chk rchk" onchange="chkRow()"></td>
+                <td>
+                  <div class="un">Chetan Naik</div>
+                  <div class="ue">chetan.n@bsolsystems.com</div>
+                </td>
+                <td><span class="sdot">Active</span></td>
+                <td><button class="acc-chip" onclick="toggleAcc(this)">2 apps · User ×2 <svg viewBox="0 0 24 24"
+                      fill="none" stroke="currentColor" stroke-width="2.5">
+                      <path d="M6 9l6 6 6-6" />
+                    </svg></button></td>
+                <td>
+                  <div class="row-acts"><button class="ic-btn"
+                      onclick="openEdit('Chetan Naik','chetan.n@bsolsystems.com')"><svg viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.8">
+                        <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                        <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                      </svg></button><button class="ic-btn del-btn" onclick="openModal('modal-del')"><svg
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <polyline points="3 6 5 6 21 6" />
+                        <path d="M19 6l-1 14H6L5 6" />
+                        <path d="M10 11v6M14 11v6" />
+                      </svg></button></div>
+                </td>
+              </tr>
+              <tr class="acc-row">
+                <td colspan="5">
+                  <div class="acc-det">
+                    <div class="adr"><span class="adr-dot" style="background:var(--vi);"></span>Vessel Inspection —
+                      <b>User</b>
+                    </div>
+                    <div class="adr"><span class="adr-dot" style="background:var(--sanct);"></span>Global Sanctions —
+                      <b>User</b>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="chk rchk" onchange="chkRow()"></td>
+                <td>
+                  <div class="un">Sanjay Mehta</div>
+                  <div class="ue">sanjay.m@bsolsystems.com</div>
+                </td>
+                <td><span class="sdot">Active</span></td>
+                <td><button class="acc-chip" onclick="toggleAcc(this)">3 apps · Admin ×1, User ×2 <svg
+                      viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <path d="M6 9l6 6 6-6" />
+                    </svg></button></td>
+                <td>
+                  <div class="row-acts"><button class="ic-btn"
+                      onclick="openEdit('Sanjay Mehta','sanjay.m@bsolsystems.com')"><svg viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.8">
+                        <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                        <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                      </svg></button><button class="ic-btn del-btn" onclick="openModal('modal-del')"><svg
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <polyline points="3 6 5 6 21 6" />
+                        <path d="M19 6l-1 14H6L5 6" />
+                        <path d="M10 11v6M14 11v6" />
+                      </svg></button></div>
+                </td>
+              </tr>
+              <tr class="acc-row">
+                <td colspan="5">
+                  <div class="acc-det">
+                    <div class="adr"><span class="adr-dot" style="background:var(--bunker);"></span>Bunker Quantity
+                      Survey — <b>Admin</b></div>
+                    <div class="adr"><span class="adr-dot" style="background:var(--vc);"></span>Vessel Condition Survey
+                      — <b>User</b></div>
+                    <div class="adr"><span class="adr-dot" style="background:var(--vi);"></span>Vessel Inspection —
+                      <b>User</b>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="chk rchk" onchange="chkRow()"></td>
+                <td>
+                  <div class="un">Benjamin Raj</div>
+                  <div class="ue">benjamin.r@bsolsystems.com</div>
+                </td>
+                <td><span class="sdot">Active</span></td>
+                <td><button class="acc-chip" onclick="toggleAcc(this)">2 apps · Admin ×2 <svg viewBox="0 0 24 24"
+                      fill="none" stroke="currentColor" stroke-width="2.5">
+                      <path d="M6 9l6 6 6-6" />
+                    </svg></button></td>
+                <td>
+                  <div class="row-acts"><button class="ic-btn"
+                      onclick="openEdit('Benjamin Raj','benjamin.r@bsolsystems.com')"><svg viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                        <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                      </svg></button><button class="ic-btn del-btn" onclick="openModal('modal-del')"><svg
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <polyline points="3 6 5 6 21 6" />
+                        <path d="M19 6l-1 14H6L5 6" />
+                        <path d="M10 11v6M14 11v6" />
+                      </svg></button></div>
+                </td>
+              </tr>
+              <tr class="acc-row">
+                <td colspan="5">
+                  <div class="acc-det">
+                    <div class="adr"><span class="adr-dot" style="background:var(--sanct);"></span>Global Sanctions —
+                      <b>Admin</b>
+                    </div>
+                    <div class="adr"><span class="adr-dot" style="background:var(--vc);"></span>Vessel Condition Survey
+                      — <b>Admin</b></div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="chk rchk" onchange="chkRow()"></td>
+                <td>
+                  <div class="un">Amith Shetty</div>
+                  <div class="ue">amith.s@bsolsystems.com</div>
+                </td>
+                <td><span class="sdot off">Inactive</span></td>
+                <td><button class="acc-chip" onclick="toggleAcc(this)">1 app · User ×1 <svg viewBox="0 0 24 24"
+                      fill="none" stroke="currentColor" stroke-width="2.5">
+                      <path d="M6 9l6 6 6-6" />
+                    </svg></button></td>
+                <td>
+                  <div class="row-acts"><button class="ic-btn"
+                      onclick="openEdit('Amith Shetty','amith.s@bsolsystems.com')"><svg viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.8">
+                        <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                        <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                      </svg></button><button class="ic-btn del-btn" onclick="openModal('modal-del')"><svg
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <polyline points="3 6 5 6 21 6" />
+                        <path d="M19 6l-1 14H6L5 6" />
+                        <path d="M10 11v6M14 11v6" />
+                      </svg></button></div>
+                </td>
+              </tr>
+              <tr class="acc-row">
+                <td colspan="5">
+                  <div class="acc-det">
+                    <div class="adr"><span class="adr-dot" style="background:var(--bunker);"></span>Bunker Quantity
+                      Survey — <b>User</b></div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- PROFILE -->
+        <div class="view" id="view-profile">
+          <p class="page-eyebrow">Account</p>
+          <h1 class="page-title">Profile</h1>
+          <div class="profile-grid" style="margin-top:20px;">
+            <div class="profile-nav">
+              <button class="pnav-item on" onclick="showPsub('my-profile',this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <circle cx="12" cy="8" r="4" />
+                  <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+                </svg>My profile
+              </button>
+              <button class="pnav-item" onclick="showPsub('change-password',this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <rect x="3" y="11" width="18" height="11" rx="2" />
+                  <path d="M7 11V7a5 5 0 0110 0v4" />
+                </svg>Change password
+              </button>
+              <div class="pnav-sep"></div>
+              <button class="pnav-item danger" onclick="openModal('modal-logout')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+                  <polyline points="16 17 21 12 16 7" />
+                  <line x1="21" y1="12" x2="9" y2="12" />
+                </svg>Sign out
+              </button>
+            </div>
+            <div class="pcontent">
+              <div class="psub show" id="psub-my-profile">
+                <h2>My profile</h2>
+                <p class="pdesc">Manage your name, email address, and display preferences.</p>
+                <div class="avatar-block">
+                  <div class="big-avatar">EE</div>
+                  <div class="avatar-info">
+                    <strong>Edwin Emmanuel</strong>
+                    <span>Administrator</span>
+                    <div class="avatar-upload">Change photo</div>
+                  </div>
                 </div>
+                <div class="form-grid">
+                  <div class="f"><label>Full name</label><input type="text" value="Edwin Emmanuel"></div>
+                  <div class="f"><label>Email address</label><input type="email" value="edwin@bsolsystems.com"></div>
+                </div>
+                <div class="save-row"><button class="btn-pr">Save changes</button><button
+                    class="btn-sec">Discard</button></div>
               </div>
-              <div class="form-grid">
-                <div class="f"><label>Full name</label><input type="text" value="Edwin Emmanuel"></div>
-                <div class="f"><label>Email address</label><input type="email" value="edwin@bsolsystems.com"></div>
+              <div class="psub" id="psub-change-password">
+                <h2>Change password</h2>
+                <p class="pdesc">Use a strong password that's at least 12 characters long.</p>
+                <div class="f" style="margin-bottom:14px;"><label>Current password</label><input type="password"
+                    placeholder="••••••••"></div>
+                <div class="form-grid">
+                  <div class="f"><label>New password</label><input type="password" placeholder="••••••••"></div>
+                  <div class="f"><label>Confirm new password</label><input type="password" placeholder="••••••••"></div>
+                </div>
+                <div class="save-row" style="margin-top:6px;"><button class="btn-pr">Update password</button></div>
               </div>
-              <div class="save-row"><button class="btn-pr">Save changes</button><button class="btn-sec">Discard</button></div>
-            </div>
-            <div class="psub" id="psub-change-password">
-              <h2>Change password</h2>
-              <p class="pdesc">Use a strong password that's at least 12 characters long.</p>
-              <div class="f" style="margin-bottom:14px;"><label>Current password</label><input type="password" placeholder="••••••••"></div>
-              <div class="form-grid">
-                <div class="f"><label>New password</label><input type="password" placeholder="••••••••"></div>
-                <div class="f"><label>Confirm new password</label><input type="password" placeholder="••••••••"></div>
-              </div>
-              <div class="save-row" style="margin-top:6px;"><button class="btn-pr">Update password</button></div>
             </div>
           </div>
         </div>
-      </div>
 
-    </div><!-- /content -->
-  </div><!-- /main -->
-</div><!-- /pg-app -->
+      </div><!-- /content -->
+    </div><!-- /main -->
+  </div><!-- /pg-app -->
 
-<!-- ══════════ MODALS ══════════ -->
+  <!-- ══════════ MODALS ══════════ -->
 
-<!-- ADD USER -->
-<div class="overlay" id="modal-add">
-  <div class="modal">
-    <div class="mh">
-      <div><h2>Add user</h2><p>Create an account and assign application access.</p></div>
-      <button class="m-close" onclick="closeModal('modal-add')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-    </div>
-    <div class="mb">
-      <div class="fr2">
-        <div class="f"><label>Full name <span style="color:var(--red)">*</span></label><input type="text" placeholder="Edwin Emmanuel"></div>
-        <div class="f"><label>Email address <span style="color:var(--red)">*</span></label><input type="email" placeholder="name@organization.com"></div>
-      </div>
-      <div class="status-row">
-        <label>Account status</label>
-        <button class="sw on" id="add-sw" onclick="togSw(this,'add-sw-lbl')"><span class="kn"></span></button>
-        <span class="sw-lbl" id="add-sw-lbl">Active</span>
-      </div>
-      <p class="asec-lbl">Application access</p>
-      <div class="role-mode">
-        <button class="rm-btn on" onclick="setRM(this,'all')">Apply to all</button>
-        <button class="rm-btn" onclick="setRM(this,'per')">Set by app</button>
-      </div>
-      <div id="rm-all">
-        <div class="app-row" style="border-bottom:none;">
-          <span style="font-size:13px;font-weight:600;flex:1;">Role for all applications</span>
-          <div class="seg" data-mode="all"><button class="sg on" onclick="segAll(this,'none')">No access</button><button class="sg" onclick="segAll(this,'user')">User</button><button class="sg" onclick="segAll(this,'admin')">Admin</button></div>
+  <!-- ADD USER -->
+  <div class="overlay" id="modal-add">
+    <div class="modal">
+      <div class="mh">
+        <div>
+          <h2>Add user</h2>
+          <p>Create an account and assign application access.</p>
         </div>
-        <p style="font-size:12px;color:var(--ink2);margin-top:8px;">Applies to all 4 available applications. Scheduling is unavailable.</p>
+        <button class="m-close" onclick="closeModal('modal-add')"><svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg></button>
       </div>
-      <div id="rm-per" style="display:none;">
-        <div class="app-row"><span class="app-dot" style="background:var(--bunker);"></span><span class="app-name">Bunker Quantity Survey</span><div class="seg" data-app="bunker"><button class="sg on" onclick="seg(this,'none')">No access</button><button class="sg" onclick="seg(this,'user')">User</button><button class="sg" onclick="seg(this,'admin')">Admin</button></div></div>
-        <div class="app-row"><span class="app-dot" style="background:var(--vc);"></span><span class="app-name">Vessel Condition Survey</span><div class="seg" data-app="vc"><button class="sg on" onclick="seg(this,'none')">No access</button><button class="sg" onclick="seg(this,'user')">User</button><button class="sg" onclick="seg(this,'admin')">Admin</button></div></div>
-        <div class="app-row"><span class="app-dot" style="background:var(--vi);"></span><span class="app-name">Vessel Inspection</span><div class="seg" data-app="vi"><button class="sg on" onclick="seg(this,'none')">No access</button><button class="sg" onclick="seg(this,'user')">User</button><button class="sg" onclick="seg(this,'admin')">Admin</button></div></div>
-        <div class="app-row"><span class="app-dot" style="background:var(--sanct);"></span><span class="app-name">Global Sanctions</span><div class="seg" data-app="sanct"><button class="sg on" onclick="seg(this,'none')">No access</button><button class="sg" onclick="seg(this,'user')">User</button><button class="sg" onclick="seg(this,'admin')">Admin</button></div></div>
-        <div class="app-row" style="opacity:.5;pointer-events:none;"><span class="app-dot" style="background:var(--sched);"></span><span class="app-name">Scheduling <span style="font-weight:400;color:var(--ink2);">— coming soon</span></span><div class="seg"><button class="sg on">No access</button><button class="sg">User</button><button class="sg">Admin</button></div></div>
+      <div class="mb">
+        <div class="fr2">
+          <div class="f"><label>Full name <span style="color:var(--red)">*</span></label><input type="text"
+              placeholder="Edwin Emmanuel"></div>
+          <div class="f"><label>Email address <span style="color:var(--red)">*</span></label><input type="email"
+              placeholder="name@organization.com"></div>
+        </div>
+        <div class="status-row">
+          <label>Account status</label>
+          <button class="sw on" id="add-sw" onclick="togSw(this,'add-sw-lbl')"><span class="kn"></span></button>
+          <span class="sw-lbl" id="add-sw-lbl">Active</span>
+        </div>
+        <p class="asec-lbl">Application access</p>
+        <div class="role-mode">
+          <button class="rm-btn on" onclick="setRM(this,'all')">Apply to all</button>
+          <button class="rm-btn" onclick="setRM(this,'per')">Set by app</button>
+        </div>
+        <div id="rm-all">
+          <div class="app-row" style="border-bottom:none;">
+            <span style="font-size:13px;font-weight:600;flex:1;">Role for all applications</span>
+            <div class="seg" data-mode="all"><button class="sg on" onclick="segAll(this,'none')">No
+                access</button><button class="sg" onclick="segAll(this,'user')">User</button><button class="sg"
+                onclick="segAll(this,'admin')">Admin</button></div>
+          </div>
+          <p style="font-size:12px;color:var(--ink2);margin-top:8px;">Applies to all 4 available applications.
+            Scheduling is unavailable.</p>
+        </div>
+        <div id="rm-per" style="display:none;">
+          <div class="app-row"><span class="app-dot" style="background:var(--bunker);"></span><span
+              class="app-name">Bunker Quantity Survey</span>
+            <div class="seg" data-app="bunker"><button class="sg on" onclick="seg(this,'none')">No
+                access</button><button class="sg" onclick="seg(this,'user')">User</button><button class="sg"
+                onclick="seg(this,'admin')">Admin</button></div>
+          </div>
+          <div class="app-row"><span class="app-dot" style="background:var(--vc);"></span><span class="app-name">Vessel
+              Condition Survey</span>
+            <div class="seg" data-app="vc"><button class="sg on" onclick="seg(this,'none')">No access</button><button
+                class="sg" onclick="seg(this,'user')">User</button><button class="sg"
+                onclick="seg(this,'admin')">Admin</button></div>
+          </div>
+          <div class="app-row"><span class="app-dot" style="background:var(--vi);"></span><span class="app-name">Vessel
+              Inspection</span>
+            <div class="seg" data-app="vi"><button class="sg on" onclick="seg(this,'none')">No access</button><button
+                class="sg" onclick="seg(this,'user')">User</button><button class="sg"
+                onclick="seg(this,'admin')">Admin</button></div>
+          </div>
+          <div class="app-row"><span class="app-dot" style="background:var(--sanct);"></span><span
+              class="app-name">Global Sanctions</span>
+            <div class="seg" data-app="sanct"><button class="sg on" onclick="seg(this,'none')">No access</button><button
+                class="sg" onclick="seg(this,'user')">User</button><button class="sg"
+                onclick="seg(this,'admin')">Admin</button></div>
+          </div>
+          <div class="app-row" style="opacity:.5;pointer-events:none;"><span class="app-dot"
+              style="background:var(--sched);"></span><span class="app-name">Scheduling <span
+                style="font-weight:400;color:var(--ink2);">— coming soon</span></span>
+            <div class="seg"><button class="sg on">No access</button><button class="sg">User</button><button
+                class="sg">Admin</button></div>
+          </div>
+        </div>
+        <div class="sum"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 16v-4M12 8h.01" />
+            <circle cx="12" cy="12" r="9" />
+          </svg><span id="add-sum">This user will have no application access yet. Choose at least one role above.</span>
+        </div>
       </div>
-      <div class="sum"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16v-4M12 8h.01"/><circle cx="12" cy="12" r="9"/></svg><span id="add-sum">This user will have no application access yet. Choose at least one role above.</span></div>
+      <div class="mf"><button class="btn-sec" onclick="closeModal('modal-add')">Cancel</button><button
+          class="btn-pr">Add user</button></div>
     </div>
-    <div class="mf"><button class="btn-sec" onclick="closeModal('modal-add')">Cancel</button><button class="btn-pr">Add user</button></div>
   </div>
-</div>
 
-<!-- EDIT USER -->
-<div class="overlay" id="modal-edit">
-  <div class="modal">
-    <div class="mh">
-      <div><h2>Edit user</h2><p id="edit-subtitle">Update profile and application access.</p></div>
-      <button class="m-close" onclick="closeModal('modal-edit')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-    </div>
-    <div class="mb">
-      <div class="fr2">
-        <div class="f"><label>Full name</label><input type="text" id="edit-name"></div>
-        <div class="f"><label>Email address</label><input type="email" id="edit-email"></div>
+  <!-- EDIT USER -->
+  <div class="overlay" id="modal-edit">
+    <div class="modal">
+      <div class="mh">
+        <div>
+          <h2>Edit user</h2>
+          <p id="edit-subtitle">Update profile and application access.</p>
+        </div>
+        <button class="m-close" onclick="closeModal('modal-edit')"><svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg></button>
       </div>
-      <div class="status-row">
-        <label>Account status</label>
-        <button class="sw on" id="edit-sw" onclick="togSw(this,'edit-sw-lbl')"><span class="kn"></span></button>
-        <span class="sw-lbl" id="edit-sw-lbl">Active</span>
+      <div class="mb">
+        <div class="fr2">
+          <div class="f"><label>Full name</label><input type="text" id="edit-name"></div>
+          <div class="f"><label>Email address</label><input type="email" id="edit-email"></div>
+        </div>
+        <div class="status-row">
+          <label>Account status</label>
+          <button class="sw on" id="edit-sw" onclick="togSw(this,'edit-sw-lbl')"><span class="kn"></span></button>
+          <span class="sw-lbl" id="edit-sw-lbl">Active</span>
+        </div>
+        <p class="asec-lbl">Application access</p>
+        <div class="app-row"><span class="app-dot" style="background:var(--bunker);"></span><span
+            class="app-name">Bunker Quantity Survey</span>
+          <div class="seg"><button class="sg on adm" onclick="seg(this,'admin')">No access</button><button class="sg"
+              onclick="seg(this,'user')">User</button><button class="sg" onclick="seg(this,'admin')">Admin</button>
+          </div>
+        </div>
+        <div class="app-row"><span class="app-dot" style="background:var(--vc);"></span><span class="app-name">Vessel
+            Condition Survey</span>
+          <div class="seg"><button class="sg" onclick="seg(this,'none')">No access</button><button class="sg"
+              onclick="seg(this,'user')">User</button><button class="sg on adm"
+              onclick="seg(this,'admin')">Admin</button></div>
+        </div>
+        <div class="app-row"><span class="app-dot" style="background:var(--vi);"></span><span class="app-name">Vessel
+            Inspection</span>
+          <div class="seg"><button class="sg" onclick="seg(this,'none')">No access</button><button class="sg on usr"
+              onclick="seg(this,'user')">User</button><button class="sg" onclick="seg(this,'admin')">Admin</button>
+          </div>
+        </div>
+        <div class="app-row"><span class="app-dot" style="background:var(--sanct);"></span><span class="app-name">Global
+            Sanctions</span>
+          <div class="seg"><button class="sg" onclick="seg(this,'none')">No access</button><button class="sg"
+              onclick="seg(this,'user')">User</button><button class="sg on adm"
+              onclick="seg(this,'admin')">Admin</button></div>
+        </div>
       </div>
-      <p class="asec-lbl">Application access</p>
-      <div class="app-row"><span class="app-dot" style="background:var(--bunker);"></span><span class="app-name">Bunker Quantity Survey</span><div class="seg"><button class="sg on adm" onclick="seg(this,'admin')">No access</button><button class="sg" onclick="seg(this,'user')">User</button><button class="sg" onclick="seg(this,'admin')">Admin</button></div></div>
-      <div class="app-row"><span class="app-dot" style="background:var(--vc);"></span><span class="app-name">Vessel Condition Survey</span><div class="seg"><button class="sg" onclick="seg(this,'none')">No access</button><button class="sg" onclick="seg(this,'user')">User</button><button class="sg on adm" onclick="seg(this,'admin')">Admin</button></div></div>
-      <div class="app-row"><span class="app-dot" style="background:var(--vi);"></span><span class="app-name">Vessel Inspection</span><div class="seg"><button class="sg" onclick="seg(this,'none')">No access</button><button class="sg on usr" onclick="seg(this,'user')">User</button><button class="sg" onclick="seg(this,'admin')">Admin</button></div></div>
-      <div class="app-row"><span class="app-dot" style="background:var(--sanct);"></span><span class="app-name">Global Sanctions</span><div class="seg"><button class="sg" onclick="seg(this,'none')">No access</button><button class="sg" onclick="seg(this,'user')">User</button><button class="sg on adm" onclick="seg(this,'admin')">Admin</button></div></div>
+      <div class="mf"><button class="btn-sec" onclick="closeModal('modal-edit')">Cancel</button><button
+          class="btn-pr">Save changes</button></div>
     </div>
-    <div class="mf"><button class="btn-sec" onclick="closeModal('modal-edit')">Cancel</button><button class="btn-pr">Save changes</button></div>
   </div>
-</div>
 
-<!-- DELETE CONFIRM -->
-<div class="overlay" id="modal-del">
-  <div class="modal" style="max-width:420px;">
-    <div class="mh"><div><h2>Delete user</h2><p>This action cannot be undone.</p></div><button class="m-close" onclick="closeModal('modal-del')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
-    <div class="mb">
-      <div class="del-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></div>
-      <p style="font-size:14px;line-height:1.6;color:var(--ink2);">The selected user will be permanently removed and will lose access to all applications immediately.</p>
+  <!-- DELETE CONFIRM -->
+  <div class="overlay" id="modal-del">
+    <div class="modal" style="max-width:420px;">
+      <div class="mh">
+        <div>
+          <h2>Delete user</h2>
+          <p>This action cannot be undone.</p>
+        </div><button class="m-close" onclick="closeModal('modal-del')"><svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg></button>
+      </div>
+      <div class="mb">
+        <div class="del-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14H6L5 6" />
+            <path d="M10 11v6M14 11v6" />
+          </svg></div>
+        <p style="font-size:14px;line-height:1.6;color:var(--ink2);">The selected user will be permanently removed and
+          will lose access to all applications immediately.</p>
+      </div>
+      <div class="mf"><button class="btn-sec" onclick="closeModal('modal-del')">Cancel</button><button
+          class="btn-del">Delete user</button></div>
     </div>
-    <div class="mf"><button class="btn-sec" onclick="closeModal('modal-del')">Cancel</button><button class="btn-del">Delete user</button></div>
   </div>
-</div>
 
-<!-- LOGOUT CONFIRM -->
-<div class="overlay" id="modal-logout">
-  <div class="modal" style="max-width:380px;">
-    <div class="mh"><div><h2>Sign out</h2><p>You'll need to sign in again to access MC360.</p></div><button class="m-close" onclick="closeModal('modal-logout')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
-    <div class="mb" style="text-align:center;padding:28px 26px;">
-      <p style="font-size:14px;color:var(--ink2);line-height:1.6;">Are you sure you want to sign out of MaritimeConnect360?</p>
+  <!-- LOGOUT CONFIRM -->
+  <div class="overlay" id="modal-logout">
+    <div class="modal" style="max-width:380px;">
+      <div class="mh">
+        <div>
+          <h2>Sign out</h2>
+          <p>You'll need to sign in again to access MC360.</p>
+        </div><button class="m-close" onclick="closeModal('modal-logout')"><svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg></button>
+      </div>
+      <div class="mb" style="text-align:center;padding:28px 26px;">
+        <p style="font-size:14px;color:var(--ink2);line-height:1.6;">Are you sure you want to sign out of
+          MaritimeConnect360?</p>
+      </div>
+      <div class="mf"><button class="btn-sec" onclick="closeModal('modal-logout')">Stay signed in</button><button
+          class="btn-del" onclick="doLogout()">Sign out</button></div>
     </div>
-    <div class="mf"><button class="btn-sec" onclick="closeModal('modal-logout')">Stay signed in</button><button class="btn-del" onclick="doLogout()">Sign out</button></div>
   </div>
-</div>
 
-<script>
-const $ = id => document.getElementById(id);
+  <script>
+    const $ = id => document.getElementById(id);
 
-// ── Pages ──
-function showForgot(){$('pg-login').classList.remove('show');$('pg-forgot').classList.add('show');}
-function showLogin(){$('pg-forgot').classList.remove('show');$('pg-login').classList.add('show');$('forgot-form-state').style.display='';$('forgot-sent-state').style.display='none';}
-function doLogin(){$('pg-login').classList.remove('show');$('pg-app').classList.add('show');}
-function doForgot(){$('forgot-form-state').style.display='none';$('forgot-sent-state').style.display='';}
-function doLogout(){closeModal('modal-logout');setTimeout(()=>{$('pg-app').classList.remove('show');$('pg-login').classList.add('show');},200);}
+    // ── Pages ──
+    function showForgot() { $('pg-login').classList.remove('show'); $('pg-forgot').classList.add('show'); }
+    function showLogin() { $('pg-forgot').classList.remove('show'); $('pg-login').classList.add('show'); $('forgot-form-state').style.display = ''; $('forgot-sent-state').style.display = 'none'; }
+    function doLogin() { $('pg-login').classList.remove('show'); $('pg-app').classList.add('show'); }
+    function doForgot() { $('forgot-form-state').style.display = 'none'; $('forgot-sent-state').style.display = ''; }
+    function doLogout() { closeModal('modal-logout'); setTimeout(() => { $('pg-app').classList.remove('show'); $('pg-login').classList.add('show'); }, 200); }
 
-// ── Sidebar ──
-function toggleSB(){
-  const app=$('pg-app'),sb=$('sb'),tog=$('sb-toggle');
-  app.classList.toggle('sb-open');sb.classList.toggle('sb-open');
-  tog.querySelector('.lbl').textContent=app.classList.contains('sb-open')?'Collapse':'Expand';
-}
+    // ── Sidebar ──
+    function toggleSB() {
+      const app = $('pg-app'), sb = $('sb'), tog = $('sb-toggle');
+      app.classList.toggle('sb-open'); sb.classList.toggle('sb-open');
+      tog.querySelector('.lbl').textContent = app.classList.contains('sb-open') ? 'Collapse' : 'Expand';
+    }
 
-// ── Nav ──
-function nav(view,el){
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('show'));
-  $('view-'+view).classList.add('show');
-  document.querySelectorAll('.sbi').forEach(b=>b.classList.remove('on'));
-  if(el)el.classList.add('on');
-}
+    // ── Nav ──
+    function nav(view, el) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('show'));
+      $('view-' + view).classList.add('show');
+      document.querySelectorAll('.sbi').forEach(b => b.classList.remove('on'));
+      if (el) el.classList.add('on');
+    }
 
-// ── Profile toggle from avatar ──
-function toggleProfile(){
-  const ab=$('avatar-btn');ab.classList.toggle('on');
-  nav('profile',null);
-  document.querySelectorAll('.sbi').forEach(b=>b.classList.remove('on'));
-}
+    // ── Profile toggle from avatar ──
+    function toggleProfile() {
+      const ab = $('avatar-btn'); ab.classList.toggle('on');
+      nav('profile', null);
+      document.querySelectorAll('.sbi').forEach(b => b.classList.remove('on'));
+    }
 
-// ── Profile sub-nav ──
-function showPsub(id,el){
-  document.querySelectorAll('.psub').forEach(p=>p.classList.remove('show'));
-  document.querySelectorAll('.pnav-item').forEach(p=>p.classList.remove('on'));
-  $('psub-'+id).classList.add('show');
-  el.classList.add('on');
-}
+    // ── Profile sub-nav ──
+    function showPsub(id, el) {
+      document.querySelectorAll('.psub').forEach(p => p.classList.remove('show'));
+      document.querySelectorAll('.pnav-item').forEach(p => p.classList.remove('on'));
+      $('psub-' + id).classList.add('show');
+      el.classList.add('on');
+    }
 
-// ── Users table ──
-function toggleAcc(btn){
-  btn.classList.toggle('open');
-  const det=btn.closest('tr').nextElementSibling.querySelector('.acc-det');
-  det.classList.toggle('show');
-}
-function chkAll(master){document.querySelectorAll('.rchk').forEach(c=>c.checked=master.checked);updBulk();}
-function chkRow(){updBulk();}
-function updBulk(){
-  const n=document.querySelectorAll('.rchk:checked').length;
-  $('bulk-n').textContent=n;
-  $('bulk-bar').classList.toggle('show',n>0);
-}
-function filterTab(btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));btn.classList.add('on');}
+    // ── Users table ──
+    function toggleAcc(btn) {
+      btn.classList.toggle('open');
+      const det = btn.closest('tr').nextElementSibling.querySelector('.acc-det');
+      det.classList.toggle('show');
+    }
+    function chkAll(master) { document.querySelectorAll('.rchk').forEach(c => c.checked = master.checked); updBulk(); }
+    function chkRow() { updBulk(); }
+    function updBulk() {
+      const n = document.querySelectorAll('.rchk:checked').length;
+      $('bulk-n').textContent = n;
+      $('bulk-bar').classList.toggle('show', n > 0);
+    }
+    function filterTab(btn) { document.querySelectorAll('.tab').forEach(t => t.classList.remove('on')); btn.classList.add('on'); }
 
-// ── Modals ──
-function openModal(id){$(id).classList.add('show');}
-function closeModal(id){$(id).classList.remove('show');}
-function openEdit(name,email){$('edit-name').value=name;$('edit-email').value=email;openModal('modal-edit');}
-document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('show');}));
+    // ── Modals ──
+    function openModal(id) { $(id).classList.add('show'); }
+    function closeModal(id) { $(id).classList.remove('show'); }
+    function openEdit(name, email) { $('edit-name').value = name; $('edit-email').value = email; openModal('modal-edit'); }
+    document.querySelectorAll('.overlay').forEach(o => o.addEventListener('click', e => { if (e.target === o) o.classList.remove('show'); }));
 
-// ── Toggle switch ──
-function togSw(btn,lblId){btn.classList.toggle('on');$(lblId).textContent=btn.classList.contains('on')?'Active':'Inactive';}
+    // ── Toggle switch ──
+    function togSw(btn, lblId) { btn.classList.toggle('on'); $(lblId).textContent = btn.classList.contains('on') ? 'Active' : 'Inactive'; }
 
-// ── Role mode (Add User modal) ──
-const aState={bunker:'none',vc:'none',vi:'none',sanct:'none'};
-function setRM(btn,mode){
-  document.querySelectorAll('.rm-btn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
-  $('rm-all').style.display=mode==='all'?'block':'none';
-  $('rm-per').style.display=mode==='per'?'block':'none';
-  updSum();
-}
-function segAll(btn,val){
-  const g=btn.closest('.seg');g.querySelectorAll('.sg').forEach(b=>b.classList.remove('on','adm','usr'));
-  btn.classList.add('on');if(val==='admin')btn.classList.add('adm');if(val==='user')btn.classList.add('usr');
-  Object.keys(aState).forEach(k=>aState[k]=val);updSum();
-}
-function seg(btn,val){
-  const g=btn.closest('.seg');g.querySelectorAll('.sg').forEach(b=>b.classList.remove('on','adm','usr'));
-  btn.classList.add('on');if(val==='admin')btn.classList.add('adm');if(val==='user')btn.classList.add('usr');
-  if(g.dataset.app)aState[g.dataset.app]=val;updSum();
-}
-function updSum(){
-  const adm=Object.values(aState).filter(v=>v==='admin').length;
-  const usr=Object.values(aState).filter(v=>v==='user').length;
-  const el=$('add-sum');
-  if(!adm&&!usr){el.textContent='This user will have no application access yet. Choose at least one role above.';return;}
-  const p=[];
-  if(adm)p.push('Admin access to '+adm+' application'+(adm>1?'s':''));
-  if(usr)p.push('User access to '+usr+' application'+(usr>1?'s':''));
-  el.textContent='This user will have '+p.join(' and ')+'.';
-}
-</script>
+    // ── Role mode (Add User modal) ──
+    const aState = { bunker: 'none', vc: 'none', vi: 'none', sanct: 'none' };
+    function setRM(btn, mode) {
+      document.querySelectorAll('.rm-btn').forEach(b => b.classList.remove('on')); btn.classList.add('on');
+      $('rm-all').style.display = mode === 'all' ? 'block' : 'none';
+      $('rm-per').style.display = mode === 'per' ? 'block' : 'none';
+      updSum();
+    }
+    function segAll(btn, val) {
+      const g = btn.closest('.seg'); g.querySelectorAll('.sg').forEach(b => b.classList.remove('on', 'adm', 'usr'));
+      btn.classList.add('on'); if (val === 'admin') btn.classList.add('adm'); if (val === 'user') btn.classList.add('usr');
+      Object.keys(aState).forEach(k => aState[k] = val); updSum();
+    }
+    function seg(btn, val) {
+      const g = btn.closest('.seg'); g.querySelectorAll('.sg').forEach(b => b.classList.remove('on', 'adm', 'usr'));
+      btn.classList.add('on'); if (val === 'admin') btn.classList.add('adm'); if (val === 'user') btn.classList.add('usr');
+      if (g.dataset.app) aState[g.dataset.app] = val; updSum();
+    }
+    function updSum() {
+      const adm = Object.values(aState).filter(v => v === 'admin').length;
+      const usr = Object.values(aState).filter(v => v === 'user').length;
+      const el = $('add-sum');
+      if (!adm && !usr) { el.textContent = 'This user will have no application access yet. Choose at least one role above.'; return; }
+      const p = [];
+      if (adm) p.push('Admin access to ' + adm + ' application' + (adm > 1 ? 's' : ''));
+      if (usr) p.push('User access to ' + usr + ' application' + (usr > 1 ? 's' : ''));
+      el.textContent = 'This user will have ' + p.join(' and ') + '.';
+    }
+  </script>
 </body>
+
 </html>
