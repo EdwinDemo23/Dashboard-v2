@@ -1977,8 +1977,16 @@
         <p class="eyebrow">MaritimeConnect360</p>
         <h2>Welcome back</h2>
         <div class="f"><label>Email address</label><input type="email" placeholder="name@organization.com"
-            id="loginEmail"></div>
-        <div class="f"><label>Password</label><input type="password" placeholder="••••••••" id="loginPwd"></div>
+            id="loginEmail" value="edwindsouza@bsolsystems.com"></div>
+        <div class="f"><label>Password</label>
+          <div style="position:relative;">
+            <input type="password" placeholder="••••••••" id="loginPwd" value="Welcome@1234" style="width:100%;padding-right:40px;">
+            <button type="button" onclick="togglePwd()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--ink3);padding:0;" id="pwd-eye">
+              <svg id="eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              <svg id="eye-closed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16" style="display:none;"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+            </button>
+          </div>
+        </div>
         <a href="#" class="forgot-link" onclick="showForgot();return false;">Forgot password?</a>
         <button class="btn-full" onclick="doLogin()">Sign in</button>
         <div class="login-foot">By signing in, you agree to the Terms of Service and Privacy Policy.</div>
@@ -3014,6 +3022,15 @@
 
   <script>
     const $ = id => document.getElementById(id);
+
+    // ── Password toggle ──
+    function togglePwd() {
+      const inp = $('loginPwd'), open = $('eye-open'), closed = $('eye-closed');
+      const show = inp.type === 'password';
+      inp.type = show ? 'text' : 'password';
+      open.style.display = show ? 'none' : '';
+      closed.style.display = show ? '' : 'none';
+    }
 
     // ── Pages ──
     function showForgot() { $('pg-login').classList.remove('show'); $('pg-forgot').classList.add('show'); }
